@@ -1,0 +1,15 @@
+{
+  "name": "@suite-kit/el-protable",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "dependencies": {
+    "@suite-kit/hooks": "*",
+    "@suite-kit/grid": "*",
+    "@suite-kit/utils": "*"
+  },
+  "devDependencies": {
+    "element-plus": "^2.3.7",
+    "vue": "^3.3.4"
+  }
+}

@@ -9,17 +9,17 @@
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
     "eslint": "^7.32.0",
-    "eslint-config-custom": "*",
     "prettier": "^2.5.1",
     "turbo": "latest"
   },
   "name": "my-turborepo",
   "packageManager": "yarn@1.22.18",
   "workspaces": [
-    "apps/*",
+    "docs",
     "packages/*"
   ],
   "dependencies": {
-    "vite": "^4.4.1"
+    "vite": "^4.4.1",
+    "vue": "^3.3.4"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "name": "docs",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vitepress dev ."
+  },
+  "dependencies": {
+    "@suite-kit/el-protable": "*",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "element-plus": "^2.3.7",
+    "vitepress": "^1.0.0-beta.5"
+  }
+}

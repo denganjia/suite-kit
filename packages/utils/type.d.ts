@@ -1,0 +1,1 @@
+declare function handleProp(prop: string): string;
