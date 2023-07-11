@@ -30,7 +30,7 @@ import { BreakPoint } from "@suite-kit/grid";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import SearchFormItem from "./SearchFormItem.vue";
 import { Grid, GridItem } from "@suite-kit/grid";
-
+import { ElButton, ElIcon, ElForm, ElFormItem } from "element-plus";
 interface Props {
 	columns?: ColumnProps[]; // 搜索配置列
 	searchParam?: { [key: string]: any }; // 搜索参数

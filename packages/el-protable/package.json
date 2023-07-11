@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "main": "./index.ts",
   "dependencies": {
-    "@suite-kit/hooks": "*",
     "@suite-kit/grid": "*",
-    "@suite-kit/utils": "*"
+    "@suite-kit/hooks": "*",
+    "@suite-kit/utils": "*",
+    "print-js": "^1.6.0"
   },
   "devDependencies": {
     "element-plus": "^2.3.7",

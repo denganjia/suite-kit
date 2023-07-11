@@ -1,6 +1,6 @@
 <template>
 	<component
-		:is="column.search?.render ?? `el-${column.search?.el}`"
+		:is="rendered_component"
 		v-bind="{ ...handleSearchProps, ...placeholder, searchParam: _searchParam, clearable }"
 		v-model.trim="_searchParam[column.search?.key ?? handleProp(column.prop!)]"
 		:data="column.search?.el === 'tree-select' ? columnEnum : []"
@@ -25,6 +25,20 @@
 <script setup lang="ts" name="SearchFormItem">
 import { computed, inject, ref } from "vue";
 import { ColumnProps } from "../../type";
+import { ElInput } from "element-plus";
+
+const rendered_component = computed(() => {
+	if (props.column.render) return props.column.render;
+	else {
+		switch (`el-${props.column.search?.el}`) {
+			case "el-input":
+				return ElInput;
+				break;
+			default:
+				break;
+		}
+	}
+});
 
 function handleProp(prop: string) {
 	const propArr = prop.split(".");
