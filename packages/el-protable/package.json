@@ -2,7 +2,26 @@
   "name": "@suite-kit/el-protable",
   "private": true,
   "version": "0.0.0",
-  "main": "./index.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./*": "./*"
+  },
+  "style": "dist/style.css",
+  "sideEffects": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build": "vite build"
+  },
   "dependencies": {
     "@suite-kit/grid": "*",
     "@suite-kit/hooks": "*",
@@ -10,7 +29,10 @@
     "print-js": "^1.6.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
     "element-plus": "^2.3.7",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vite": "^4.4.3"
   }
 }

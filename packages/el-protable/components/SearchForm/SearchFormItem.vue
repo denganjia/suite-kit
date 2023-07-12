@@ -25,19 +25,37 @@
 <script setup lang="ts" name="SearchFormItem">
 import { computed, inject, ref } from "vue";
 import { ColumnProps } from "../../type";
-import { ElInput } from "element-plus";
+import {
+	ElInput,
+	ElInputNumber,
+	ElSelect,
+	ElSelectV2,
+	ElTreeSelect,
+	ElCascader,
+	ElDatePicker,
+	ElTimePicker,
+	ElTimeSelect,
+	ElSwitch,
+	ElSlider,
+} from "element-plus";
+
+const fields = {
+	"el-input": ElInput,
+	"el-input-number": ElInputNumber,
+	"el-select": ElSelect,
+	"el-select-v2": ElSelectV2,
+	"el-tree-select": ElTreeSelect,
+	"el-cascader": ElCascader,
+	"el-date-picker": ElDatePicker,
+	"el-time-picker": ElTimePicker,
+	"el-time-select": ElTimeSelect,
+	"el-switch": ElSwitch,
+	"el-slider": ElSlider,
+};
 
 const rendered_component = computed(() => {
 	if (props.column.render) return props.column.render;
-	else {
-		switch (`el-${props.column.search?.el}`) {
-			case "el-input":
-				return ElInput;
-				break;
-			default:
-				break;
-		}
-	}
+	else return fields[`el-${props.column.search?.el}`];
 });
 
 function handleProp(prop: string) {

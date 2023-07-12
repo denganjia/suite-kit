@@ -3,7 +3,10 @@
 </template>
 
 <script setup lang="ts">
-const columns = [{ label: "姓名", prop: "name", search: { el: "input" } }];
+const columns:any = [
+	{ label: "姓名", prop: "name", search: { el: "input" } },
+	{ label: "年龄", prop: "age", search: { el: "select" } },
+];
 
 import ProTable from "@suite-kit/el-protable";
 </script>
