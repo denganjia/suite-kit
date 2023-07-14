@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import typescript from '@rollup/plugin-typescript';
 import { resolve } from 'path'
 export default defineConfig({
   plugins: [
     // @ts-ignore
-    vueJsx(), vue()
+    vueJsx(), vue(), typescript()
   ],
   build: {
     lib: {

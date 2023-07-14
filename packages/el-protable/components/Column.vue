@@ -60,3 +60,4 @@ const RenderTableColumn = (item: ColumnProps) => {
 	);
 };
 </script>
+..

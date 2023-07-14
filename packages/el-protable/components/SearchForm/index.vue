@@ -1,5 +1,6 @@
 <template>
-	<div v-if="columns.length" class="card table-search">
+	<el-card>
+		<div v-if="columns.length" class="table-search">
 		<el-form ref="formRef" :model="searchParam">
 			<Grid ref="gridRef" :collapsed="collapsed" :collapsed-rows="collapsedRows" :gap="[20, 0]" :cols="searchCol">
 				<GridItem v-for="(item, index) in columns" :key="item.prop" v-bind="getResponsive(item)" :index="index">
@@ -22,15 +23,16 @@
 			</Grid>
 		</el-form>
 	</div>
+	</el-card>
 </template>
 <script setup lang="ts" name="SearchForm">
 import { computed, ref, inject } from "vue";
-import { ColumnProps } from "../../type";
+import { ColumnProps } from "../../index.d";
 import { BreakPoint } from "@suite-kit/grid";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import SearchFormItem from "./SearchFormItem.vue";
 import { Grid, GridItem } from "@suite-kit/grid";
-import { ElButton, ElIcon, ElForm, ElFormItem } from "element-plus";
+import { ElButton, ElIcon, ElForm, ElFormItem,ElCard } from "element-plus";
 interface Props {
 	columns?: ColumnProps[]; // 搜索配置列
 	searchParam?: { [key: string]: any }; // 搜索参数
@@ -83,3 +85,4 @@ const showCollapse = computed(() => {
 	return show;
 });
 </script>
+../..
