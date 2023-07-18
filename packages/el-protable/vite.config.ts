@@ -1,12 +1,14 @@
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import typescript from '@rollup/plugin-typescript';
-import { resolve } from 'path'
+import {resolve} from 'path'
+import UnoCss from "unocss/vite"
+
 export default defineConfig({
   plugins: [
     // @ts-ignore
-    vueJsx(), vue(), typescript()
+    vueJsx(), vue(), typescript(), UnoCss()
   ],
   build: {
     lib: {
@@ -28,6 +30,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: [resolve(__dirname, './style.scss')],
+    include: [resolve(__dirname, './style.scss'), resolve(__dirname, "./index.d.ts")],
   },
 })

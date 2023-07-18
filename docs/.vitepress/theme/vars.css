@@ -1,3 +1,6 @@
 .VPDoc.has-aside .content-container {
 	max-width: unset !important;
 }
+.vp-doc table {
+	margin: unset;
+}

@@ -7,18 +7,7 @@
     "dist"
   ],
   "main": "./index.ts",
-  "module": "./dist/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.js"
-    },
-    "./*": "./*"
-  },
   "style": "dist/style.css",
-  "sideEffects": [
-    "dist/*"
-  ],
   "types": "index.d.ts",
   "scripts": {
     "build": "vite build"
@@ -35,6 +24,7 @@
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "element-plus": "^2.3.7",
     "typescript": "^5.1.6",
+    "unocss": "^0.53.5",
     "vite": "^4.4.3",
     "vue": "^3.3.4"
   }
