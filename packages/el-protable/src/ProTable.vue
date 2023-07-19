@@ -9,90 +9,92 @@
       :search-param="searchParam"
       :search-col="searchCol"
   />
-  <el-card>
-    <!-- 表格内容 card -->
-    <div class="table-main">
-      <!-- 表格头部 操作按钮 -->
-      <div class="table-header">
-        <div class="header-button-lf">
-          <slot
-              name="tableHeader"
-              :selected-list-ids="selectedListIds"
-              :selected-list="selectedList"
-              :is-selected="isSelected"
-          />
-        </div>
-        <div v-if="toolButton" class="header-button-ri">
-          <slot name="toolButton">
-            <el-button :icon="Refresh" circle @click="getTableList"/>
-            <el-button v-if="columns.length" :icon="Printer" circle @click="print"/>
-            <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
-            <el-button v-if="searchColumns.length" :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
-          </slot>
-        </div>
-      </div>
-      <!-- 表格主体 -->
-      <el-table
-          ref="tableRef"
-          v-bind="$attrs"
-          :data="data ?? tableData"
-          :border="border"
-          :row-key="rowKey"
-          @selection-change="selectionChange"
-      >
-        <!-- 默认插槽 -->
-        <slot></slot>
-        <template v-for="item in tableColumns" :key="item">
-          <!-- selection || index || expand -->
-          <el-table-column
-              v-if="item.type && ['selection', 'index', 'expand'].includes(item.type)"
-              v-bind="item"
-              :align="item.align ?? 'center'"
-              :reserve-selection="item.type == 'selection'"
-          >
-            <template v-if="item.type == 'expand'" #default="scope">
-              <component :is="item.render" v-bind="scope" v-if="item.render"></component>
-              <slot v-else :name="item.type" v-bind="scope"></slot>
-            </template>
-          </el-table-column>
-          <!-- other -->
-          <TableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
-            <template v-for="slot in Object.keys($slots)" #[slot]="scope">
-              <slot :name="slot" v-bind="scope"></slot>
-            </template>
-          </TableColumn>
-        </template>
-        <!-- 插入表格最后一行之后的插槽 -->
-        <template #append>
-          <slot name="append"></slot>
-        </template>
-        <!-- 无数据 -->
-        <template #empty>
-          <div>
-            <slot name="empty">
-              <div class="bg-red">暂无数据</div>
+  <div class="table-main">
+    <el-card>
+      <!-- 表格内容 card -->
+      <div>
+        <!-- 表格头部 操作按钮 -->
+        <div class="table-header">
+          <div class="header-button-lf">
+            <slot
+                name="tableHeader"
+                :selected-list-ids="selectedListIds"
+                :selected-list="selectedList"
+                :is-selected="isSelected"
+            />
+          </div>
+          <div v-if="toolButton" class="header-button-ri">
+            <slot name="toolButton">
+              <el-button :icon="Refresh" circle @click="getTableList"/>
+              <el-button v-if="columns.length" :icon="Printer" circle @click="print"/>
+              <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
+              <el-button v-if="searchColumns.length" :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
             </slot>
           </div>
-        </template>
-      </el-table>
-      <!-- 分页组件 -->
-      <slot name="pagination">
-        <Pagination
-            v-if="pagination"
-            :pageable="pageable"
-            :handle-size-change="handleSizeChange"
-            :handle-current-change="handleCurrentChange"
-        />
-      </slot>
-    </div>
-  </el-card>
-  <!-- 查询表单 card -->
+        </div>
+        <!-- 表格主体 -->
+        <el-table
+            ref="tableRef"
+            v-bind="$attrs"
+            :data="data ?? tableData"
+            :border="border"
+            :row-key="rowKey"
+            @selection-change="selectionChange"
+        >
+          <!-- 默认插槽 -->
+          <slot></slot>
+          <template v-for="item in tableColumns" :key="item">
+            <!-- selection || index || expand -->
+            <el-table-column
+                v-if="item.type && ['selection', 'index', 'expand'].includes(item.type)"
+                v-bind="item"
+                :align="item.align ?? 'center'"
+                :reserve-selection="item.type == 'selection'"
+            >
+              <template v-if="item.type == 'expand'" #default="scope">
+                <component :is="item.render" v-bind="scope" v-if="item.render"></component>
+                <slot v-else :name="item.type" v-bind="scope"></slot>
+              </template>
+            </el-table-column>
+            <!-- other -->
+            <TableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
+              <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+                <slot :name="slot" v-bind="scope"></slot>
+              </template>
+            </TableColumn>
+          </template>
+          <!-- 插入表格最后一行之后的插槽 -->
+          <template #append>
+            <slot name="append"></slot>
+          </template>
+          <!-- 无数据 -->
+          <template #empty>
+            <div>
+              <slot name="empty">
+                <div class="bg-red">暂无数据</div>
+              </slot>
+            </div>
+          </template>
+        </el-table>
+        <!-- 分页组件 -->
+        <slot name="pagination">
+          <Pagination
+              v-if="pagination"
+              :pageable="pageable"
+              :handle-size-change="handleSizeChange"
+              :handle-current-change="handleCurrentChange"
+          />
+        </slot>
+      </div>
+    </el-card>
+  </div>
+
 
   <!-- 列设置 -->
   <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting"/>
 </template>
 
-<script setup lang="ts" name="ProTable">
+<script setup lang="ts">
 defineOptions({
   name: "ElProTable"
 })

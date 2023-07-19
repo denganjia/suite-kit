@@ -1,24 +1,19 @@
 <template>
-  <ProTable :request-api="api" :columns="columns"></ProTable>
+  <el-tabs v-model="active">
+    <el-tab-pane label="ElProTable" name="ElProTable">
+      <ElConfigProvider :locale="zhCn">
+        <ElProTable></ElProTable>
+      </ElConfigProvider>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 <script setup lang="ts">
-import ProTable from "@suite-kit/el-protable"
-import type {ProTableInstance, ColumnProps} from "@suite-kit/el-protable/index.d"
+import ElProTable from "./components/ElProTable.vue"
+import {ElTabs, ElTabPane, ElConfigProvider} from "element-plus";
+import {ref} from "vue"
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 
-const api = async (p: any) => {
-  console.log(p)
-  return {
-    code: 200,
-    data: {
-      list: [
-      ],
-      total: 1
-    }
-  }
-}
-const columns: ColumnProps[] = [
-  {label: "姓名", prop: "name", search: {el: "input"}}
-]
+const active = ref("ElProTable")
 </script>
 
 
