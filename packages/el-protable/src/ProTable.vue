@@ -27,7 +27,12 @@
             <slot name="toolButton">
               <el-button :icon="Refresh" circle @click="getTableList"/>
               <el-button v-if="columns.length" :icon="Printer" circle @click="print"/>
-              <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting"/>
+              <el-popover v-if="columns.length" trigger="click">
+                <template #reference>
+                  <el-button :icon="Operation" circle @click="openColSetting"/>
+                </template>
+                <el-tree :data="colSetting" show-checkbox draggable :allow-drop="allowDrop"/>
+              </el-popover>
               <el-button v-if="searchColumns.length" :icon="Search" circle @click="isShowSearch = !isShowSearch"/>
             </slot>
           </div>
@@ -91,7 +96,7 @@
 
 
   <!-- 列设置 -->
-  <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting"/>
+<!--  <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting"/>-->
 </template>
 
 <script setup lang="ts">
@@ -99,7 +104,7 @@ defineOptions({
   name: "ElProTable"
 })
 import {ref, watch, computed, provide, onMounted} from "vue";
-import {ElTable, ElButton, ElTableColumn, ElCard} from "element-plus";
+import {ElTable, ElButton, ElTableColumn, ElCard, ElPopover, ElTree} from "element-plus";
 import {useTable, useSelection} from "@suite-kit/hooks";
 import {BreakPoint} from "@suite-kit/grid";
 import {ColumnProps} from "../index.d";
@@ -107,7 +112,6 @@ import {Refresh, Printer, Operation, Search} from "@element-plus/icons-vue";
 import {filterEnum, formatValue, handleProp, handleRowAccordingToProp} from "@suite-kit/utils";
 import SearchForm from "../components/SearchForm/index.vue";
 import Pagination from "../components/Pagination.vue";
-import ColSetting from "../components/ColSetting.vue";
 import TableColumn from "../components/Column.vue";
 import printJS from "print-js";
 
@@ -125,6 +129,11 @@ export interface ProTableProps {
   toolButton?: boolean; // 是否显示表格功能按钮 ==> 非必传（默认为true）
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   searchCol?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
+}
+
+//允许退拽
+const allowDrop = (draggingNode: any, _dropNode: any, type: string) => {
+  return type == "next" || type == "prev"
 }
 
 // 接受父组件参数，配置默认值

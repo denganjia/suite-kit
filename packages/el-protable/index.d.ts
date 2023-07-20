@@ -1,8 +1,62 @@
-import { VNode, ComponentPublicInstance } from "vue";
-import { BreakPoint, Responsive } from "@suite-kit/grid";
-import { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
-import { ProTableProps } from "./src/ProTable.vue";
+import {VNode, ComponentPublicInstance, PropType, Component, ExtractPropTypes} from "vue";
+import {BreakPoint, Responsive} from "@suite-kit/grid";
+import {TableColumnCtx} from "element-plus/es/components/table/src/table-column/defaults";
+import {TimeSelectProps} from "element-plus/es/components/time-select/src/time-select"
+import {ProTableProps} from "./src/ProTable.vue";
 import ProTable from "./src/ProTable.vue";
+import type {
+  InputProps,
+  SelectProps as SelectV2Props,
+  InputNumberProps,
+  DatePickerProps,
+  CheckboxProps,
+  cascaderProps,
+  TimePickerDefaultProps,
+  SwitchProps,
+  SliderProps
+} from "element-plus";
+
+type SelectProps = {
+  name: string,
+  id: string,
+  autocomplete: string,
+  automaticDropdown: boolean,
+  size: 'large' | 'default' | 'small',
+  effect: 'light' | 'dark',
+  disabled: boolean,
+  clearable: boolean,
+  filterable: boolean,
+  allowCreate: boolean,
+  loading: boolean,
+  popperClass: string,
+  remote: boolean,
+  loadingText: string,
+  noMatchText: string,
+  noDataText: string,
+  remoteMethod: Function,
+  filterMethod: Function,
+  multiple: boolean,
+  multipleLimit: number,
+  placeholder: string,
+  defaultFirstOption: boolean,
+  reserveKeyword: boolean,
+  valueKey: string,
+  collapseTags: boolean,
+  collapseTagsTooltip: boolean,
+  maxCollapseTags: number,
+  teleported: boolean,
+  persistent: boolean,
+  clearIcon: PropType<string | Component>,
+  fitInputWidth: boolean,
+  suffixIcon: PropType<string | Component>,
+  tagType: 'success' | 'info' | 'warning' | 'danger',
+  validateEvent: boolean,
+  remoteShowSuffix: boolean,
+  suffixTransition: boolean,
+  placement: string,
+}
+
+type CascaderProps = ExtractPropTypes<typeof cascaderProps>
 
 export interface EnumProps {
   label?: string; // 选项框显示的文字

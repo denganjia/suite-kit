@@ -32,35 +32,35 @@
       width: 100%;
     }
 
-    .el-table__header th {
-      height: 45px;
-      font-size: 15px;
-      font-weight: bold;
-      color: var(--el-text-color-primary);
-      background: var(--el-fill-color-light);
-    }
+    //.el-table__header th {
+    //  height: 45px;
+    //  font-size: 15px;
+    //  font-weight: bold;
+    //  color: var(--el-text-color-primary);
+    //  background: var(--el-fill-color-light);
+    //}
+    //
+    //.el-table__row {
+    //  height: 45px;
+    //  font-size: 14px;
+    //}
 
-    .el-table__row {
-      height: 45px;
-      font-size: 14px;
-    }
-
-    // 设置 el-table 中 header 文字不换行，并省略
-    .el-table__header .el-table__cell > .cell {
-      white-space: nowrap;
-    }
+    //// 设置 el-table 中 header 文字不换行，并省略
+    //.el-table__header .el-table__cell > .cell {
+    //  white-space: nowrap;
+    //}
 
     // 解决表格数据为空时样式不居中问题(仅在element-plus中)
-    .el-table__empty-block {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-
-      .table-empty {
-        line-height: 30px;
-      }
-    }
+    //.el-table__empty-block {
+    //  position: absolute;
+    //  top: 50%;
+    //  left: 50%;
+    //  transform: translate(-50%, -50%);
+    //
+    //  .table-empty {
+    //    line-height: 30px;
+    //  }
+    //}
 
     // table 中 image 图片样式
     .table-image {
