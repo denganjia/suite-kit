@@ -3,6 +3,6 @@
 		"jsx": "preserve",
 		"outDir": "dist"
 	},
-	"include": ["./*.ts", "src/ProTable.vue", "components/**/*.vue"],
+	"include": ["./*.ts", "src/*.vue", "components/**/*.vue"],
 	"extends": "../../tsconfig.json"
 }

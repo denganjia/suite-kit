@@ -15,6 +15,7 @@
 		"removeComments": false,
 		"rootDir": ".",
 		"types": [],
-    "jsx": "preserve",
+		"jsx": "preserve",
+		"skipLibCheck": true
 	}
 }

@@ -9,15 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "element-plus": "^2.3.8",
+    "@suite-kit/el-protable": "*"
   },
   "devDependencies": {
-    "@suite-kit/el-protable": "*",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "element-plus": "^2.3.8",
     "sass": "^1.63.6",
-    "typescript": "^5.0.2",
+    "typescript": "^5.1.6",
     "vite": "^4.4.0",
     "vue-tsc": "^1.8.3"
   }
