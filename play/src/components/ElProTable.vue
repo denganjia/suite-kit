@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import ProTable from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import { ColumnProps} from "@suite-kit/el-protable";
 import { fetchData } from "../fetch";
 
 const columns: ColumnProps[] = [

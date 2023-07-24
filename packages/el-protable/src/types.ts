@@ -1,10 +1,8 @@
-import { VNode, ComponentPublicInstance, PropType, Component, ExtractPropTypes } from "vue";
+import { VNode, Component } from "vue";
 import { BreakPoint, Responsive } from "@suite-kit/grid";
 import { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import { timeSelectProps } from "element-plus/es/components/time-select/src/time-select";
 import { TreeComponentProps } from "element-plus/es/components/tree/src/tree.type";
-import { ProTableProps } from "./src/ProTable.vue";
-import ProTable from "./src/ProTable.vue";
 import type {
 	inputProps,
 	// SelectProps as SelectV2Props,
@@ -17,7 +15,7 @@ import type {
 	sliderProps,
 } from "element-plus";
 import { ExtractPublicPropTypes } from "@vue/runtime-core";
-type PropsType<T> = {
+export type PropsType<T> = {
 	[K in keyof T]: T[K] extends { type: import("vue").PropType<infer P> }
 		? PropsType<P>
 		: T[K] extends BooleanConstructor
@@ -68,9 +66,9 @@ type SelectProps = {
 	maxCollapseTags: number;
 	teleported: boolean;
 	persistent: boolean;
-	clearIcon: PropType<string | Component>;
+	clearIcon: import("vue").PropType<string | Component>;
 	fitInputWidth: boolean;
-	suffixIcon: PropType<string | Component>;
+	suffixIcon: import("vue").PropType<string | Component>;
 	tagType: "success" | "info" | "warning" | "danger";
 	validateEvent: boolean;
 	remoteShowSuffix: boolean;
@@ -79,58 +77,62 @@ type SelectProps = {
 };
 type CascaderPropsType = Partial<PropsType<typeof cascaderProps>>;
 
-type TextConfig = {
+interface TextConfig {
 	el: "text";
 	props?: Partial<PropsType<typeof inputProps>>;
-};
-type NumberConfig = {
+}
+interface NumberConfig {
 	el: "number";
 	props?: Partial<typeof inputNumberProps>;
-};
-type SelectConfig = {
+}
+interface CheckboxConfig {
+	el: "checkbox";
+	props?: Partial<PropsType<typeof checkboxProps>>;
+}
+interface SelectConfig {
 	el: "select";
 	props?: Partial<SelectProps>;
-};
+}
 
-type SelectV2Config = {
+interface SelectV2Config {
 	el: "select-v2";
 	props?: Partial<ExtractPublicPropTypes<any>>;
-};
+}
 
-type TreeSelectConfig = {
+interface TreeSelectConfig {
 	el: "tree-select";
 	props?: Partial<SelectProps & TreeComponentProps>;
-};
+}
 
-type DatePickerConfig = {
+interface DatePickerConfig {
 	el: "date-picker";
 	props?: Partial<PropsType<typeof datePickerProps>>;
-};
+}
 
-type TimePickerConfig = {
+interface TimePickerConfig {
 	el: "time-picker";
 	props?: Partial<ExtractPublicPropTypes<typeof timePickerDefaultProps>>;
-};
+}
 
-type TimeSelectConfig = {
+interface TimeSelectConfig {
 	el: "time-select";
 	props?: Partial<ExtractPublicPropTypes<typeof timeSelectProps>>;
-};
+}
 
-type SliderConfig = {
+interface SliderConfig {
 	el: "slider";
 	props?: Partial<ExtractPublicPropTypes<typeof sliderProps>>;
-};
+}
 
-type SwitchConfig = {
+interface SwitchConfig {
 	el: "switch";
 	props?: Partial<ExtractPublicPropTypes<typeof switchProps>>;
-};
+}
 
-export type CascaderConfig = {
+export interface CascaderConfig {
 	el: "cascader";
-	config?: TreeComponentProps;
-};
+	config?: CascaderPropsType;
+}
 
 export interface EnumProps {
 	label?: string; // 选项框显示的文字
@@ -186,6 +188,7 @@ export type SearchProps = {
 		| SwitchConfig
 		| TreeSelectConfig
 		| CascaderConfig
+		| CheckboxConfig
 	);
 
 export type FieldNamesProps = {
@@ -219,5 +222,3 @@ export interface ColumnProps<T = any>
 	render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx语法）
 	_children?: ColumnProps<T>[]; // 多级表头
 }
-
-export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>;

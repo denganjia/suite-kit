@@ -106,7 +106,7 @@ import { ref, watch, computed, provide, onMounted } from "vue";
 import { ElTable, ElButton, ElTableColumn, ElCard, ElPopover, ElTree } from "element-plus";
 import { useTable, useSelection } from "@suite-kit/hooks";
 import { BreakPoint } from "@suite-kit/grid";
-import { ColumnProps } from "./types";
+import { ColumnProps } from "./index";
 import { Refresh, Printer, Operation, Search } from "@element-plus/icons-vue";
 import { filterEnum, formatValue, handleProp, handleRowAccordingToProp } from "@suite-kit/utils";
 import SearchForm from "./components/SearchForm/index.vue";

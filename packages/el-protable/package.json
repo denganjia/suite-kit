@@ -1,44 +1,42 @@
 {
-  "name": "@suite-kit/el-protable",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./index.ts",
-  "module": "./dist/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.js"
-    },
-    "./*": "./*"
-  },
-  "style": "dist/style.css",
-  "types": "index.d.ts",
-  "scripts": {
-    "build": "vite build"
-  },
-  "dependencies": {
-    "@suite-kit/grid": "*",
-    "@suite-kit/hooks": "*",
-    "@suite-kit/utils": "*",
-    "print-js": "^1.6.0"
-  },
-  "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.2",
-    "@vitejs/plugin-vue": "^4.2.3",
-    "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "element-plus": "^2.3.7",
-    "typescript": "^5.1.6",
-    "unocss": "^0.53.5",
-    "vite": "^4.4.3",
-    "vite-plugin-dts": "^3.3.1",
-    "vue": "^3.3.4"
-  },
-  "peerDependencies": {
-    "element-plus": "^2.3.7",
-    "vue": "^3.3.4"
-  }
+	"name": "@suite-kit/el-protable",
+	"version": "0.0.0",
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"main": "./index.ts",
+	"module": "./dist/index.js",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.umd.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./*": "./*"
+	},
+	"types": "./dist/index.d.ts",
+	"style": "dist/style.css",
+	"scripts": {
+		"build": "vite build"
+	},
+	"dependencies": {
+		"@suite-kit/grid": "*",
+		"@suite-kit/hooks": "*",
+		"@suite-kit/utils": "*",
+		"print-js": "^1.6.0",
+		"vue": "^3.3.4",
+		"element-plus": "^2.3.7"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^4.2.3",
+		"@vitejs/plugin-vue-jsx": "^3.0.1",
+		"typescript": "^5.1.6",
+		"vite": "^4.4.3",
+		"vite-plugin-dts": "^3.3.1"
+	},
+	"peerDependencies": {
+		"element-plus": "^2.3.7",
+		"vue": "^3.3.4"
+	}
 }
