@@ -33,11 +33,14 @@
 								</template>
 								<el-tree
 									ref="colSettingRef"
-									:data="colSetting"
+									:data="tableColumns"
 									node-key="prop"
 									show-checkbox
 									draggable
 									:allow-drop="allowDrop"
+									:props="{ children: '_children' }"
+									@node-drop="dropSuccess"
+									:filter-node-method="filterTreeNode"
 								/>
 							</el-popover>
 							<el-button v-if="searchColumns.length" :icon="Search" circle @click="isShowSearch = !isShowSearch" />
@@ -135,10 +138,26 @@ export interface ProTableProps {
 }
 
 //允许放置
-const allowDrop = (draggingNode: any, _dropNode: any, type: string) => {
-	return type == "next" || type == "prev";
+const allowDrop = (draggingNode: any, dropNode: any, type: string) => {
+	if (draggingNode.level == dropNode.level) {
+		return type == "next" || type == "prev";
+	} else if (draggingNode.parent?.id == dropNode.parent?.id) {
+		return type == "next" || type == "prev";
+	} else {
+		return false;
+	}
 };
 
+//拖拽成功
+const dropSuccess = (draggingNode: any) => {
+	console.log(draggingNode);
+	if (draggingNode.checked) colSettingRef.value.setChecked(draggingNode.key, true, true);
+};
+// 过滤隐藏的column
+const filterTreeNode = (value: any, data: any) => {
+	console.log(data);
+	return data.isShow;
+};
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
 	columns: () => [],
@@ -180,6 +199,7 @@ const clearSelection = () => tableRef.value!.clearSelection();
 onMounted(() => {
 	props.requestAuto && getTableList();
 	colSettingRef.value?.setCheckedNodes(colSetting);
+	colSettingRef.value?.filter();
 });
 
 // 监听页面 initParam 改化，重新获取表格数据
@@ -238,18 +258,18 @@ const colSettingRef = ref();
 // 列设置 ==> 过滤掉不需要设置的列
 const colSetting = tableColumns.value!.map(item => {
 	if (!["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow) {
-		return { ...item };
+		return { ...item, checked: true };
 	}
 });
 
-watch(
-	() => colSetting,
-	() => {
-		console.log("changeShow");
-		colSettingRef.value?.setCheckedNodes(colSetting);
-	},
-	{ deep: true },
-);
+// watch(
+// 	() => colSetting,
+// 	() => {
+// 		console.log("changeShow");
+// 		colSettingRef.value?.setCheckedNodes(colSetting);
+// 	},
+// 	{ deep: true },
+// );
 
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({

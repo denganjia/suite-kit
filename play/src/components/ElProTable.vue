@@ -12,16 +12,22 @@ defineOptions({
 
 const columns = reactive<ColumnProps[]>([
 	{
-		label: "姓名",
-		prop: "name",
-		search: {
-			el: "text",
-			props: { clearable: true },
-			defaultValue: "测试",
-		},
-		isShow: true,
+		label: "用户",
+		prop: "user",
+		_children: [
+			{
+				label: "姓名",
+				prop: "name",
+				search: {
+					el: "text",
+					props: { clearable: true },
+					defaultValue: "测试",
+				},
+				isShow: true,
+			},
+			{ label: "年龄", prop: "age", search: { el: "number", props: {} } },
+		],
 	},
-	{ label: "年龄", prop: "age", search: { el: "number", props: {} } },
 	{ label: "日期", prop: "date", search: { el: "date-picker", props: { "value-format": "x" } } },
 	{
 		label: "时间",
@@ -42,6 +48,7 @@ const columns = reactive<ColumnProps[]>([
 			{ label: "男", value: 1 },
 			{ label: "女", value: 0 },
 		],
+		isShow: false,
 	},
 	{
 		label: "Cascader",
