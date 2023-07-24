@@ -1,27 +1,11 @@
-import { VNode, Component } from "vue";
+import { VNode } from "vue";
 import { BreakPoint, Responsive } from "@suite-kit/grid";
 import { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
-import { timeSelectProps } from "element-plus/es/components/time-select/src/time-select";
-import { TreeComponentProps } from "element-plus/es/components/tree/src/tree.type";
-import type {
-	inputProps,
-	// SelectProps as SelectV2Props,
-	inputNumberProps,
-	datePickerProps,
-	checkboxProps,
-	cascaderProps,
-	timePickerDefaultProps,
-	switchProps,
-	sliderProps,
-} from "element-plus";
-import { ExtractPublicPropTypes } from "@vue/runtime-core";
 export type PropsType<T> = {
 	[K in keyof T]: T[K] extends { type: import("vue").PropType<infer P> }
 		? PropsType<P>
-		: T[K] extends BooleanConstructor
-		? boolean
-		: T[K] extends StringConstructor
-		? string
+		: T[K] extends new (value?: any) => infer ConstructorType
+		? ConstructorType
 		: T[K] extends import("element-plus/es/utils").EpPropFinalized<
 				infer Type,
 				infer Value,
@@ -36,103 +20,6 @@ export type PropsType<T> = {
 			: never
 		: T[K];
 };
-type SelectProps = {
-	name: string;
-	id: string;
-	autocomplete: string;
-	automaticDropdown: boolean;
-	size: "large" | "default" | "small";
-	effect: "light" | "dark";
-	disabled: boolean;
-	clearable: boolean;
-	filterable: boolean;
-	allowCreate: boolean;
-	loading: boolean;
-	popperClass: string;
-	remote: boolean;
-	loadingText: string;
-	noMatchText: string;
-	noDataText: string;
-	remoteMethod: Function;
-	filterMethod: Function;
-	multiple: boolean;
-	multipleLimit: number;
-	placeholder: string;
-	defaultFirstOption: boolean;
-	reserveKeyword: boolean;
-	valueKey: string;
-	collapseTags: boolean;
-	collapseTagsTooltip: boolean;
-	maxCollapseTags: number;
-	teleported: boolean;
-	persistent: boolean;
-	clearIcon: import("vue").PropType<string | Component>;
-	fitInputWidth: boolean;
-	suffixIcon: import("vue").PropType<string | Component>;
-	tagType: "success" | "info" | "warning" | "danger";
-	validateEvent: boolean;
-	remoteShowSuffix: boolean;
-	suffixTransition: boolean;
-	placement: string;
-};
-type CascaderPropsType = Partial<PropsType<typeof cascaderProps>>;
-
-interface TextConfig {
-	el: "text";
-	props?: Partial<PropsType<typeof inputProps>>;
-}
-interface NumberConfig {
-	el: "number";
-	props?: Partial<typeof inputNumberProps>;
-}
-interface CheckboxConfig {
-	el: "checkbox";
-	props?: Partial<PropsType<typeof checkboxProps>>;
-}
-interface SelectConfig {
-	el: "select";
-	props?: Partial<SelectProps>;
-}
-
-interface SelectV2Config {
-	el: "select-v2";
-	props?: Partial<ExtractPublicPropTypes<any>>;
-}
-
-interface TreeSelectConfig {
-	el: "tree-select";
-	props?: Partial<SelectProps & TreeComponentProps>;
-}
-
-interface DatePickerConfig {
-	el: "date-picker";
-	props?: Partial<PropsType<typeof datePickerProps>>;
-}
-
-interface TimePickerConfig {
-	el: "time-picker";
-	props?: Partial<ExtractPublicPropTypes<typeof timePickerDefaultProps>>;
-}
-
-interface TimeSelectConfig {
-	el: "time-select";
-	props?: Partial<ExtractPublicPropTypes<typeof timeSelectProps>>;
-}
-
-interface SliderConfig {
-	el: "slider";
-	props?: Partial<ExtractPublicPropTypes<typeof sliderProps>>;
-}
-
-interface SwitchConfig {
-	el: "switch";
-	props?: Partial<ExtractPublicPropTypes<typeof switchProps>>;
-}
-
-export interface CascaderConfig {
-	el: "cascader";
-	config?: CascaderPropsType;
-}
 
 export interface EnumProps {
 	label?: string; // 选项框显示的文字
@@ -146,8 +33,8 @@ export interface EnumProps {
 export type TypeProps = "index" | "selection" | "expand";
 
 export type SearchType =
-	| "input"
-	| "input-number"
+	| "text"
+	| "number"
 	| "select"
 	| "select-v2"
 	| "tree-select"
@@ -167,29 +54,15 @@ export type SearchRenderScope = {
 };
 
 export type SearchProps = {
-	// el?: SearchType; // 当前项搜索框的类型
-	// props?: any; // 搜索项参数，根据 element plus 官方文档来传递，该属性所有值会透传到组件
+	el?: SearchType; // 当前项搜索框的类型
+	props?: any; // 搜索项参数，根据 element plus 官方文档来传递，该属性所有值会透传到组件
 	key?: string; // 当搜索项 key 不为 prop 属性时，可通过 key 指定
 	order?: number; // 搜索项排序（从大到小）
 	span?: number; // 搜索项所占用的列数，默认为1列
 	offset?: number; // 搜索字段左侧偏移列数
 	defaultValue?: any; // 搜索项默认值
 	render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx语法）
-} & Partial<Record<BreakPoint, Responsive>> &
-	(
-		| TextConfig
-		| NumberConfig
-		| SelectConfig
-		| SelectV2Config
-		| DatePickerConfig
-		| TimePickerConfig
-		| TimeSelectConfig
-		| SliderConfig
-		| SwitchConfig
-		| TreeSelectConfig
-		| CascaderConfig
-		| CheckboxConfig
-	);
+} & Partial<Record<BreakPoint, Responsive>>;
 
 export type FieldNamesProps = {
 	label: string;

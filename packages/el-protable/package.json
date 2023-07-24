@@ -5,18 +5,9 @@
 	"files": [
 		"dist"
 	],
-	"main": "./index.ts",
-	"module": "./dist/index.js",
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.umd.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./*": "./*"
-	},
+	"main": "./src/index.ts",
 	"types": "./dist/index.d.ts",
-	"style": "dist/style.css",
+	"style": "./dist/style.css",
 	"scripts": {
 		"build": "vite build"
 	},

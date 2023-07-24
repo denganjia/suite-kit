@@ -26,12 +26,19 @@
 					<div v-if="toolButton" class="header-button-ri">
 						<slot name="toolButton">
 							<el-button :icon="Refresh" circle @click="getTableList" />
-							<el-button v-if="columns.length" :icon="Printer" circle @click="print" />
+							<!-- <el-button v-if="columns.length" :icon="Printer" circle @click="print" /> -->
 							<el-popover v-if="columns.length" trigger="click">
 								<template #reference>
-									<el-button :icon="Operation" circle @click="openColSetting" />
+									<el-button :icon="Operation" circle />
 								</template>
-								<el-tree :data="colSetting" show-checkbox draggable :allow-drop="allowDrop" />
+								<el-tree
+									ref="colSettingRef"
+									:data="colSetting"
+									node-key="prop"
+									show-checkbox
+									draggable
+									:allow-drop="allowDrop"
+								/>
 							</el-popover>
 							<el-button v-if="searchColumns.length" :icon="Search" circle @click="isShowSearch = !isShowSearch" />
 						</slot>
@@ -45,6 +52,7 @@
 					:border="border"
 					:row-key="rowKey"
 					@selection-change="selectionChange"
+					table-layout="auto"
 				>
 					<!-- 默认插槽 -->
 					<slot></slot>
@@ -93,26 +101,22 @@
 			</div>
 		</el-card>
 	</div>
-
-	<!-- 列设置 -->
-	<!--  <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting"/>-->
 </template>
 
 <script setup lang="ts">
 defineOptions({
 	name: "ElProTable",
 });
-import { ref, watch, computed, provide, onMounted } from "vue";
+import { ref, watch, provide, onMounted } from "vue";
 import { ElTable, ElButton, ElTableColumn, ElCard, ElPopover, ElTree } from "element-plus";
 import { useTable, useSelection } from "@suite-kit/hooks";
 import { BreakPoint } from "@suite-kit/grid";
 import { ColumnProps } from "./index";
-import { Refresh, Printer, Operation, Search } from "@element-plus/icons-vue";
-import { filterEnum, formatValue, handleProp, handleRowAccordingToProp } from "@suite-kit/utils";
+import { Refresh, Operation, Search } from "@element-plus/icons-vue";
+import { handleProp } from "@suite-kit/utils";
 import SearchForm from "./components/SearchForm/index.vue";
 import Pagination from "./components/Pagination.vue";
 import TableColumn from "./components/Column.vue";
-import printJS from "print-js";
 
 export interface ProTableProps {
 	columns: ColumnProps[]; // 列配置项  ==> 必传
@@ -130,7 +134,7 @@ export interface ProTableProps {
 	searchCol?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
 }
 
-//允许退拽
+//允许放置
 const allowDrop = (draggingNode: any, _dropNode: any, type: string) => {
 	return type == "next" || type == "prev";
 };
@@ -173,7 +177,10 @@ const {
 const clearSelection = () => tableRef.value!.clearSelection();
 
 // 初始化请求
-onMounted(() => props.requestAuto && getTableList());
+onMounted(() => {
+	props.requestAuto && getTableList();
+	colSettingRef.value?.setCheckedNodes(colSetting);
+});
 
 // 监听页面 initParam 改化，重新获取表格数据
 watch(() => props.initParam, getTableList, { deep: true });
@@ -227,59 +234,22 @@ searchColumns.forEach((column, index) => {
 // 排序搜索表单项
 searchColumns.sort((a, b) => a.search!.order! - b.search!.order!);
 
+const colSettingRef = ref();
 // 列设置 ==> 过滤掉不需要设置的列
-const colRef = ref();
-const colSetting = tableColumns.value!.filter(
-	item => !["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow,
-);
-const openColSetting = () => colRef.value.openColSetting();
-
-// 🙅‍♀️ 不需要打印可以把以下方法删除，打印功能目前存在很多 bug
-// 处理打印数据（把后台返回的值根据 enum 做转换）
-const printData = computed(() => {
-	const handleData = props.data ?? tableData.value;
-	const printDataList = JSON.parse(JSON.stringify(selectedList.value.length ? selectedList.value : handleData));
-	// 找出需要转换数据的列（有 enum || 多级 prop && 需要根据 enum 格式化）
-	const needTransformCol = flatColumns.value!.filter(
-		item => (item.enum || (item.prop && item.prop.split(".").length > 1)) && item.isFilterEnum,
-	);
-	needTransformCol.forEach(colItem => {
-		printDataList.forEach((tableItem: { [key: string]: any }) => {
-			tableItem[handleProp(colItem.prop!)] =
-				colItem.prop!.split(".").length > 1 && !colItem.enum
-					? formatValue(handleRowAccordingToProp(tableItem, colItem.prop!))
-					: filterEnum(
-							handleRowAccordingToProp(tableItem, colItem.prop!),
-							enumMap.value.get(colItem.prop!),
-							colItem.fieldNames,
-					  );
-			for (const key in tableItem) {
-				if (tableItem[key] === null) tableItem[key] = formatValue(tableItem[key]);
-			}
-		});
-	});
-	return printDataList;
+const colSetting = tableColumns.value!.map(item => {
+	if (!["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow) {
+		return { ...item };
+	}
 });
 
-// 打印表格数据（💥 多级表头数据打印时，只能扁平化成一维数组，printJs 不支持多级表头打印）
-const print = () => {
-	const header = `<div style="text-align: center"><h2>${props.title}</h2></div>`;
-	const gridHeaderStyle =
-		"border: 1px solid #ebeef5;height: 45px;color: #232425;text-align: center;background-color: #fafafa;";
-	const gridStyle = "border: 1px solid #ebeef5;height: 40px;color: #494b4e;text-align: center";
-	printJS({
-		printable: printData.value,
-		header: props.title && header,
-		properties: flatColumns
-			.value!.filter(
-				item => !["selection", "index", "expand"].includes(item.type!) && item.isShow && item.prop !== "operation",
-			)
-			.map((item: ColumnProps) => ({ field: handleProp(item.prop!), displayName: item.label })),
-		type: "json",
-		gridHeaderStyle,
-		gridStyle,
-	});
-};
+watch(
+	() => colSetting,
+	() => {
+		console.log("changeShow");
+		colSettingRef.value?.setCheckedNodes(colSetting);
+	},
+	{ deep: true },
+);
 
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
