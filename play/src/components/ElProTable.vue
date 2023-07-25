@@ -1,16 +1,28 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns"> </ProTable>
+	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback"> </ProTable>
 </template>
 <script setup lang="tsx">
 import ProTable from "@suite-kit/el-protable";
 import { ColumnProps } from "@suite-kit/el-protable";
 import { fetchData } from "../fetch";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 defineOptions({
 	name: "Test-El-ProTable",
 });
 
+const dataCallback = (data: any) => {
+	console.log(data);
+	return data;
+};
+
+const enumGender = ref([
+	{ label: "男", value: 1 },
+	{ label: "女", value: 0 },
+]);
 const columns = reactive<ColumnProps[]>([
+	{
+		type: "selection",
+	},
 	{
 		label: "用户",
 		prop: "user",
@@ -20,7 +32,6 @@ const columns = reactive<ColumnProps[]>([
 				prop: "name",
 				search: {
 					el: "text",
-					props: { clearable: true },
 					defaultValue: "测试",
 				},
 				isShow: true,
@@ -28,7 +39,11 @@ const columns = reactive<ColumnProps[]>([
 			{ label: "年龄", prop: "age", search: { el: "number", props: {} } },
 		],
 	},
-	{ label: "日期", prop: "date", search: { el: "date-picker", props: { "value-format": "x" } } },
+	{
+		label: "日期",
+		prop: "date",
+		search: { el: "date-picker", props: { "value-format": "x" } },
+	},
 	{
 		label: "时间",
 		prop: "time",
@@ -44,11 +59,7 @@ const columns = reactive<ColumnProps[]>([
 		label: "性别",
 		prop: "gender",
 		search: { el: "select", props: { clearable: false } },
-		enum: [
-			{ label: "男", value: 1 },
-			{ label: "女", value: 0 },
-		],
-		isShow: false,
+		enum: enumGender,
 	},
 	{
 		label: "Cascader",

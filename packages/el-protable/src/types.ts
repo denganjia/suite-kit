@@ -1,6 +1,7 @@
-import { VNode } from "vue";
-import { BreakPoint, Responsive } from "@suite-kit/grid";
-import { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
+import type { VNode, Ref } from "vue";
+import type { BreakPoint, Responsive } from "@suite-kit/grid";
+import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
+import type { Table } from "@suite-kit/hooks";
 export type PropsType<T> = {
 	[K in keyof T]: T[K] extends { type: import("vue").PropType<infer P> }
 		? PropsType<P>
@@ -20,7 +21,22 @@ export type PropsType<T> = {
 			: never
 		: T[K];
 };
-
+type ToolButtonConfig = ["refresh", "setting", "search"] | boolean;
+export interface ProTableProps {
+	columns: ColumnProps[]; // 列配置项  ==> 必传
+	data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
+	requestApi?: (params: any) => Promise<any>; // 请求表格数据的 api ==> 非必传
+	requestAuto?: boolean; // 是否自动执行请求 api ==> 非必传（默认为true）
+	requestError?: (params: any) => void; // 表格 api 请求错误监听 ==> 非必传
+	dataCallback?: Table.DataCallBack; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
+	title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
+	pagination?: boolean; // 是否需要分页组件 ==> 非必传（默认为true）
+	initParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
+	border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为true）
+	toolButton?: ToolButtonConfig; // 是否显示表格功能按钮 ==> 非必传（默认为true）
+	rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
+	searchCol?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
+}
 export interface EnumProps {
 	label?: string; // 选项框显示的文字
 	value?: string | number | boolean | any[]; // 选项框值
@@ -86,9 +102,9 @@ export type HeaderRenderScope<T> = {
 export interface ColumnProps<T = any>
 	extends Partial<Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader">> {
 	tag?: boolean; // 是否是标签展示
-	isShow?: boolean; // 是否显示在表格当中
+	isShow?: boolean | Ref<boolean>; // 是否显示在表格当中
 	search?: SearchProps; // 搜索项配置
-	enum?: EnumProps[] | ((params?: any) => Promise<any>); // 枚举类型（字典）
+	enum?: EnumProps[] | ((params?: any) => Promise<any>) | Ref<EnumProps[]>; // 枚举类型（字典）
 	isFilterEnum?: boolean; // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
 	fieldNames?: FieldNamesProps; // 指定 label && value && children 的 key 值
 	headerRender?: (scope: HeaderRenderScope<T>) => VNode; // 自定义表头内容渲染（tsx语法）

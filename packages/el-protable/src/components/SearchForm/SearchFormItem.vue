@@ -24,10 +24,22 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, inject, ref } from "vue";
 import { ColumnProps, SearchType } from "../../types";
-import { ElDatePicker, ElTimePicker } from "element-plus";
+import {
+	ElDatePicker,
+	ElTimePicker,
+	ElInput,
+	ElInputNumber,
+	ElSelect,
+	ElSelectV2,
+	ElCascader,
+	ElTreeSelect,
+	ElSwitch,
+	ElSlider,
+	ElTimeSelect,
+	ElOption,
+} from "element-plus";
 const DynamicOption = defineAsyncComponent(async () => {
-	// @ts-ignore
-	return await import("element-plus/es/components/select/src/option");
+	return ElOption;
 });
 defineOptions({
 	name: "ElProTableSearchFormItem",
@@ -35,29 +47,27 @@ defineOptions({
 const getElementComponent = async (component: SearchType) => {
 	switch (component) {
 		case "text":
-			return await import("element-plus/es/components/input/index");
+			return ElInput;
 		case "number":
-			return await import("element-plus/es/components/input-number/index");
+			return ElInputNumber;
 		case "select":
-			return await import("element-plus/es/components/select/index");
+			return ElSelect;
 		case "select-v2":
-			return await import("element-plus/es/components/select-v2/index");
+			return ElSelectV2;
 		case "tree-select":
-			return await import("element-plus/es/components/tree-select/index");
+			return ElTreeSelect;
 		case "cascader":
-			return await import("element-plus/es/components/cascader/index");
+			return ElCascader;
 		case "date-picker":
-			// return await import("element-plus/es/components/date-picker/index");
 			return ElDatePicker;
 		case "time-picker":
-			// return await import("element-plus/es/components/time-picker/index");
 			return ElTimePicker;
 		case "time-select":
-			return await import("element-plus/es/components/time-select/index");
+			return ElTimeSelect;
 		case "switch":
-			return await import("element-plus/es/components/switch/index");
+			return ElSwitch;
 		case "slider":
-			return await import("element-plus/es/components/slider/index");
+			return ElSlider;
 	}
 };
 
