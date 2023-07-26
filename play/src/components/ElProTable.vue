@@ -1,17 +1,32 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback"> </ProTable>
+	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback" title="用户信息表" :pagination="{
+		
+	}">
+		<template #tableHeader>
+			<el-button type="warning" @click="changeEnum">警告</el-button>
+		</template>
+	</ProTable>
 </template>
 <script setup lang="tsx">
 import ProTable from "@suite-kit/el-protable";
 import { ColumnProps } from "@suite-kit/el-protable";
 import { fetchData } from "../fetch";
 import { reactive, ref } from "vue";
+import { ElButton } from "element-plus";
+
 defineOptions({
 	name: "Test-El-ProTable",
 });
 
+const changeEnum = () => {
+	enumGender.value = [
+		{ label: "张三", value: 1 },
+		{ label: "李四", value: 0 },
+	];
+	columns[1].label = "四川";
+};
+
 const dataCallback = (data: any) => {
-	console.log(data);
 	return data;
 };
 
@@ -26,6 +41,7 @@ const columns = reactive<ColumnProps[]>([
 	{
 		label: "用户",
 		prop: "user",
+		tip: "222222",
 		_children: [
 			{
 				label: "姓名",

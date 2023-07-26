@@ -1,74 +1,77 @@
 /* proTable */
 .table-box,
 .table-main {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  margin-top: 18px;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	margin-top: 18px;
 
-  // 表格 header 样式
-  .table-header {
-    .header-button-lf {
-      float: left;
-    }
+	// 表格 header 样式
+	.table-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 15px;
+		.header-button-lf {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex: 1;
+			.title {
+				font-weight: 500;
+				font-size: 16px;
+			}
+		}
+	}
 
-    .header-button-ri {
-      float: right;
-    }
+	// el-table 表格样式
+	.el-table {
+		flex: 1;
 
-    .el-button {
-      margin-bottom: 15px;
-    }
-  }
+		// 修复 safari 浏览器表格错位 https://github.com/HalseySpicy/Geeker-Admin/issues/83
+		table {
+			width: 100%;
+		}
 
-  // el-table 表格样式
-  .el-table {
-    flex: 1;
+		// table 中 image 图片样式
+		.table-image {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+		}
+	}
 
-    // 修复 safari 浏览器表格错位 https://github.com/HalseySpicy/Geeker-Admin/issues/83
-    table {
-      width: 100%;
-    }
-
-    // table 中 image 图片样式
-    .table-image {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-  }
-
-  // 表格 pagination 样式
-  .el-pagination {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
+	// 表格 pagination 样式
+	.el-pagination {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 20px;
+	}
 }
 
 // table-search 表格搜索样式
 .table-search {
-  //padding: 0 0 18px;
-  .el-form {
-    .el-form-item__content > * {
-      width: 100%;
-    }
+	//padding: 0 0 18px;
+	.el-form {
+		.el-form-item__content > * {
+			width: 100%;
+		}
 
-    .el-form-item {
-      margin: 0;
-    }
+		.el-form-item {
+			margin: 0;
+		}
 
-    // 去除时间选择器上下 padding
-    .el-range-editor.el-input__wrapper {
-      padding: 0 10px;
-    }
-  }
+		// 去除时间选择器上下 padding
+		.el-range-editor.el-input__wrapper {
+			padding: 0 10px;
+		}
+	}
 
-  .operation {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
+	.operation {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
 }

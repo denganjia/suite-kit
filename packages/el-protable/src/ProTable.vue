@@ -16,14 +16,18 @@
 				<!-- 表格头部 操作按钮 -->
 				<div class="table-header">
 					<div class="header-button-lf">
-						<slot
-							name="tableHeader"
-							:selected-list-ids="selectedListIds"
-							:selected-list="selectedList"
-							:is-selected="isSelected"
-						/>
+						<span>{{ props.title }}</span>
+						<span>
+							<slot
+								name="tableHeader"
+								:selected-list-ids="selectedListIds"
+								:selected-list="selectedList"
+								:is-selected="isSelected"
+							/>
+						</span>
 					</div>
 					<div v-if="toolButton" class="header-button-ri">
+						<el-divider v-if="$slots['tableHeader']" direction="vertical"></el-divider>
 						<slot name="toolButton">
 							<el-button v-if="showToolButtonItem('refresh')" :icon="Refresh" circle @click="getTableList" />
 							<!-- <el-button v-if="columns.length" :icon="Printer" circle @click="print" /> -->
@@ -101,7 +105,7 @@
 				<slot name="pagination">
 					<!-- 分页组件 -->
 					<el-pagination
-						v-if="pagination"
+						v-if="!!pagination"
 						:background="true"
 						:current-page="pageable.pageNum"
 						:page-size="pageable.pageSize"
@@ -122,7 +126,7 @@ defineOptions({
 	name: "ElProTable",
 });
 import { ref, watch, provide, onMounted, unref } from "vue";
-import { ElTable, ElButton, ElTableColumn, ElCard, ElPopover, ElTree, ElPagination } from "element-plus";
+import { ElTable, ElButton, ElTableColumn, ElCard, ElPopover, ElTree, ElPagination, ElDivider } from "element-plus";
 import { useTable, useSelection } from "@suite-kit/hooks";
 import { ColumnProps } from "./index";
 import { Refresh, Operation, Search } from "@element-plus/icons-vue";
@@ -186,7 +190,7 @@ const {
 	reset,
 	handleSizeChange,
 	handleCurrentChange,
-} = useTable(props.requestApi, props.initParam, props.pagination, props.dataCallback, props.requestError);
+} = useTable(props.requestApi, props.initParam, Boolean(props.pagination), props.dataCallback, props.requestError);
 
 // 清空选中数据列表
 const clearSelection = () => tableRef.value!.clearSelection();

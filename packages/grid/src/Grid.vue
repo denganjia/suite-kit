@@ -18,7 +18,7 @@ import {
 	onActivated,
 } from "vue";
 import type { VNodeArrayChildren, VNode } from "vue";
-import type { BreakPoint } from "../type";
+import type { BreakPoint } from "./type.d";
 
 defineOptions({
 	name: "SuitKitGrid",

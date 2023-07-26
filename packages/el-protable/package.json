@@ -6,13 +6,13 @@
 		"dist"
 	],
 	"main": "./src/index.ts",
-	"types": "./src/types.ts",
+	"types": "./dist/index.d.ts",
 	"style": "./dist/style.css",
 	"scripts": {
 		"build": "vite build"
 	},
 	"dependencies": {
-		"@suite-kit/grid": "*",
+		"@suite-kit/grid": "*", 
 		"@suite-kit/hooks": "*",
 		"@suite-kit/utils": "*",
 		"element-plus": "^2.3.7",
