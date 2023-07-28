@@ -64,7 +64,7 @@ export interface EnumProps {
 	[key: string]: any;
 }
 
-export type TypeProps = "index" | "selection" | "expand";
+export type TypeProps = "index" | "selection" | "expand" | "drag";
 
 export type SearchType =
 	| "text"

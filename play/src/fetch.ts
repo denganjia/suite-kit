@@ -25,12 +25,19 @@ function generatedData(query: Partial<Row> & { pageSize: number; pageNum: number
 				gender: query.gender ?? index % 2 == 0 ? 1 : 0,
 				cascader: query.gender ?? index % 2 == 0 ? 0 : 1,
 				time: query.time ?? new Date().getTime(),
+				id: window.crypto.randomUUID(),
+				children: [
+					{
+						name: query.name ?? `李四${index}`,
+						age: query.age ?? index * 10 + 1,
+						id: window.crypto.randomUUID(),
+					},
+				],
 			};
 		});
 }
 
 export async function fetchData(query: Partial<Row> & { pageSize: number; pageNum: number }) {
-	console.log(query);
 	return generatedResponse({
 		list: generatedData(query),
 		total: 281,

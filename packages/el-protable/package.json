@@ -12,15 +12,19 @@
 		"build": "vite build"
 	},
 	"dependencies": {
-		"@suite-kit/grid": "*", 
+		"@suite-kit/grid": "*",
 		"@suite-kit/hooks": "*",
 		"@suite-kit/utils": "*",
+		"@vueuse/core": "^10.2.1",
+		"@vueuse/integrations": "^10.2.1",
 		"element-plus": "^2.3.7",
 		"lodash": "^4.17.21",
 		"print-js": "^1.6.0",
+		"sortablejs": "^1.15.0",
 		"vue": "^3.3.4"
 	},
 	"devDependencies": {
+		"@types/sortablejs": "^1.15.1",
 		"@vitejs/plugin-vue": "^4.2.3",
 		"@vitejs/plugin-vue-jsx": "^3.0.1",
 		"typescript": "^5.1.6",

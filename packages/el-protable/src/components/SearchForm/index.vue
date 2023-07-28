@@ -1,13 +1,11 @@
 <template>
 	<el-card>
 		<div v-if="columns.length" class="table-search">
-			<el-form ref="formRef" :model="searchParam" :show-message="false">
+			<el-form ref="formRef" :model="searchParam" :show-message="false" label-width="auto">
 				<Grid ref="gridRef" :collapsed="collapsed" :collapsed-rows="collapsedRows" :gap="[20, 20]" :cols="searchCol">
 					<GridItem v-for="(item, index) in columns" :key="item.prop" v-bind="getResponsive(item)" :index="index">
 						<el-form-item>
-							<template #label>
-								{{ item.label }} :
-							</template>
+							<template #label> {{ item.label }} : </template>
 							<SearchFormItem :column="item" :search-param="searchParam" />
 						</el-form-item>
 					</GridItem>

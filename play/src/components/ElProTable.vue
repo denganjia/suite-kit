@@ -1,5 +1,5 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns" title="用户信息表">
+	<ProTable :request-api="fetchData" :columns="columns" title="用户信息表" :data-callback="dataCallback">
 		<template #tableHeader>
 			<el-button type="warning" @click="changeEnum">警告</el-button>
 		</template>
@@ -14,6 +14,12 @@ import { ElButton } from "element-plus";
 defineOptions({
 	name: "Test-El-ProTable",
 });
+
+const dataCallback = (data: any) => {
+	console.log(data);
+	return data;
+};
+
 const changeEnum = () => {
 	enumGender.value.length = 0;
 	enumGender.value.push(
@@ -27,6 +33,9 @@ const changeEnum = () => {
 		label: "测试",
 		prop: "test",
 		isShow: true,
+		search: {
+			el: "number",
+		},
 	});
 };
 
@@ -39,6 +48,9 @@ const columns = reactive<ColumnProps[]>([
 		type: "selection",
 	},
 	{
+		type: "drag",
+	},
+	{
 		label: "用户超级长用户超级长用户超级长用户超级长",
 		prop: "user",
 		tip: "222222",
@@ -48,7 +60,6 @@ const columns = reactive<ColumnProps[]>([
 				prop: "name",
 				search: {
 					el: "text",
-					defaultValue: "测试",
 				},
 				isShow: true,
 			},
@@ -63,7 +74,7 @@ const columns = reactive<ColumnProps[]>([
 	{
 		label: "时间",
 		prop: "time",
-		search: { el: "time-picker", props: { "value-format": "x" } },
+		search: { el: "time-picker", props: { "value-format": "x" }, order: 1 },
 		render(scope) {
 			if (scope.row?.time) {
 				return new Date(scope.row?.time).toLocaleTimeString();

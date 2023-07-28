@@ -88,6 +88,20 @@
 								<slot v-else :name="item.type" v-bind="scope"></slot>
 							</template>
 						</el-table-column>
+						<el-table-column
+							v-else-if="item.type == 'drag'"
+							min-width="0"
+							:resizable="false"
+							width="48px"
+							align="center"
+							type=""
+						>
+							<div class="el-protable-drag-handle">
+								<el-icon>
+									<DCaret></DCaret>
+								</el-icon>
+							</div>
+						</el-table-column>
 						<!-- other -->
 						<TableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
 							<template v-for="slot in Object.keys($slots)" #[slot]="scope">
@@ -127,10 +141,11 @@
 </template>
 
 <script setup lang="ts">
+import { useSortable } from "@vueuse/integrations/useSortable";
 defineOptions({
 	name: "ElProTable",
 });
-import { ref, watch, provide, onMounted, unref, computed } from "vue";
+import { ref, watch, provide, onMounted, unref, computed, reactive } from "vue";
 import {
 	ElTable,
 	ElButton,
@@ -144,7 +159,7 @@ import {
 } from "element-plus";
 import { useTable, useSelection } from "@suite-kit/hooks";
 import { ColumnProps } from "./index";
-import { Refresh, Operation, Search, Rank } from "@element-plus/icons-vue";
+import { Refresh, Operation, Search, Rank, DCaret } from "@element-plus/icons-vue";
 import { handleProp } from "@suite-kit/utils";
 import SearchForm from "./components/SearchForm/index.vue";
 import TableColumn from "./components/Column.vue";
@@ -240,7 +255,7 @@ onMounted(() => {
 });
 
 // 接收 columns 并设置为响应式
-const tableColumns = ref<ColumnProps[]>(props.columns);
+const tableColumns = reactive<ColumnProps[]>(props.columns);
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
@@ -269,15 +284,28 @@ const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) =>
 	return flatArr.filter(item => !item._children?.length);
 };
 
-// flatColumns
+// flatColumns 扁平结构的columns
 const flatColumns = ref<ColumnProps[]>();
-flatColumns.value = flatColumnsFunc(tableColumns.value);
+watch(
+	tableColumns,
+	n => {
+		console.log(n);
+		flatColumns.value = flatColumnsFunc(n);
+	},
+	{ immediate: true },
+);
 
 // 过滤需要搜索的配置项
-const searchColumns = flatColumns.value.filter(item => item.search?.el || item.search?.render);
-
+// const searchColumns = flatColumns.value.filter(item => item.search?.el || item.search?.render);
+const searchColumns = computed(() => {
+	return (
+		flatColumns.value
+			?.filter(item => item.search?.el || item.search?.render)
+			.sort((a, b) => a.search!.order! - b.search!.order!) ?? []
+	);
+});
 // 设置搜索表单排序默认值 && 设置搜索表单项的默认值
-searchColumns.forEach((column, index) => {
+searchColumns.value.forEach((column, index) => {
 	column.search!.order = column.search!.order ?? index + 2;
 	if (column.search?.defaultValue !== undefined && column.search?.defaultValue !== null) {
 		searchInitParam.value[column.search.key ?? handleProp(column.prop!)] = column.search?.defaultValue;
@@ -285,15 +313,27 @@ searchColumns.forEach((column, index) => {
 	}
 });
 
-// 排序搜索表单项
-searchColumns.sort((a, b) => a.search!.order! - b.search!.order!);
-
 const colSettingRef = ref();
 // 列设置 ==> 过滤掉不需要设置的列
-const colSetting = tableColumns.value!.map(item => {
+const colSetting = tableColumns.map(item => {
 	if (!["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow) {
 		return { ...item, checked: true };
 	}
+});
+// 行拖拽
+// 表格主体
+// const tBody = ref<HTMLElement | null>();
+onMounted(() => {
+	setTimeout(() => {
+		useSortable(document.body.getElementsByClassName("el-table__row")[0].parentElement, tableData, {
+			onUpdate() {},
+			handle: ".el-protable-drag-handle",
+			animation: 200,
+			fallbackOnBody: true,
+			invertSwap: true,
+			group: "nested",
+		});
+	}, 0);
 });
 
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
@@ -341,4 +381,8 @@ const tableEmits = {
 // 监听页面 initParam 改化，重新获取表格数据
 watch(() => props.initParam, tableEmits.request, { deep: true });
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-protable-drag-handle {
+	cursor: move;
+}
+</style>
