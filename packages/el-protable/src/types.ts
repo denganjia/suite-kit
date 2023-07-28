@@ -1,8 +1,7 @@
-import type { VNode, Ref } from "vue";
+import type { VNode, Ref, Component } from "vue";
 import type { BreakPoint, Responsive } from "@suite-kit/grid";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import type { Table } from "@suite-kit/hooks";
-import type { PaginationProps } from "element-plus";
 export type PropsType<T> = {
 	[K in keyof T]: T[K] extends { type: import("vue").PropType<infer P> }
 		? PropsType<P>
@@ -24,7 +23,22 @@ export type PropsType<T> = {
 };
 type ToolButtonConfig = ["refresh", "setting", "search"] | boolean;
 
-type PaginationConfig = boolean | Omit<PaginationProps, "defaultCurrentPage" | "pageCount" | "pageSize" | "total">;
+export type PaginationConfig = {
+	small?: boolean;
+	background?: boolean;
+	defaultPageSize?: number;
+	pagerCount?: number;
+	defaultCurrentPage?: number;
+	layout?: string;
+	pageSizes?: number[];
+	popperClass?: string;
+	prevText?: string;
+	prevIcon?: string | Component;
+	nextText?: string;
+	nextIcon?: String | Component;
+	disabled?: boolean;
+	hideOnSinglePage?: boolean;
+};
 export interface ProTableProps {
 	columns: ColumnProps[]; // 列配置项  ==> 必传
 	data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
@@ -34,7 +48,7 @@ export interface ProTableProps {
 	dataCallback?: Table.DataCallBack; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
 	title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
 	// pagination?: boolean; // 是否需要分页组件 ==> 非必传（默认为true）
-	pagination?: PaginationConfig;
+	pagination?: PaginationConfig | boolean;
 	initParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
 	border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为true）
 	toolButton?: ToolButtonConfig; // 是否显示表格功能按钮 ==> 非必传（默认为true）

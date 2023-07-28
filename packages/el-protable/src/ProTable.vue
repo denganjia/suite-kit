@@ -3,8 +3,8 @@
 <template>
 	<SearchForm
 		v-show="isShowSearch"
-		:search="search"
-		:reset="reset"
+		:search="tableEmits.search"
+		:reset="tableEmits.reset"
 		:columns="searchColumns"
 		:search-param="searchParam"
 		:search-col="searchCol"
@@ -16,7 +16,7 @@
 				<!-- 表格头部 操作按钮 -->
 				<div class="table-header">
 					<div class="header-button-lf">
-						<span>{{ props.title }}</span>
+						<span class="title">{{ props.title }}</span>
 						<span>
 							<slot
 								name="tableHeader"
@@ -26,12 +26,12 @@
 							/>
 						</span>
 					</div>
-					<div v-if="toolButton" class="header-button-ri">
+					<div v-if="!!toolButton" class="header-button-ri">
 						<el-divider v-if="$slots['tableHeader']" direction="vertical"></el-divider>
 						<slot name="toolButton">
-							<el-button v-if="showToolButtonItem('refresh')" :icon="Refresh" circle @click="getTableList" />
+							<el-button v-if="showToolButtonItem('refresh')" :icon="Refresh" circle @click="tableEmits.refresh" />
 							<!-- <el-button v-if="columns.length" :icon="Printer" circle @click="print" /> -->
-							<el-popover v-if="showToolButtonItem('setting') && columns.length" trigger="click">
+							<el-popover v-if="showToolButtonItem('setting') && columns.length" trigger="click" width="fit-content">
 								<template #reference>
 									<el-button :icon="Operation" circle />
 								</template>
@@ -45,7 +45,15 @@
 									:props="{ children: '_children' }"
 									@node-drop="dropSuccess"
 									:filter-node-method="filterTreeNode"
-								/>
+									@check-change="treeCheckChange"
+								>
+									<template #default="{ data }">
+										<div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+											<span>{{ data.label }}</span>
+											<el-icon> <Rank></Rank> </el-icon>
+										</div>
+									</template>
+								</el-tree>
 							</el-popover>
 							<el-button
 								v-if="showToolButtonItem('search') && searchColumns.length"
@@ -64,7 +72,6 @@
 					:border="border"
 					:row-key="rowKey"
 					@selection-change="selectionChange"
-					table-layout="auto"
 				>
 					<!-- 默认插槽 -->
 					<slot></slot>
@@ -106,12 +113,10 @@
 					<!-- 分页组件 -->
 					<el-pagination
 						v-if="!!pagination"
-						:background="true"
+						v-bind="paginationProps"
 						:current-page="pageable.pageNum"
 						:page-size="pageable.pageSize"
-						:page-sizes="[10, 25, 50, 100]"
 						:total="pageable.total"
-						layout="total, sizes, prev, pager, next, jumper"
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
 					></el-pagination>
@@ -125,15 +130,25 @@
 defineOptions({
 	name: "ElProTable",
 });
-import { ref, watch, provide, onMounted, unref } from "vue";
-import { ElTable, ElButton, ElTableColumn, ElCard, ElPopover, ElTree, ElPagination, ElDivider } from "element-plus";
+import { ref, watch, provide, onMounted, unref, computed } from "vue";
+import {
+	ElTable,
+	ElButton,
+	ElTableColumn,
+	ElCard,
+	ElPopover,
+	ElTree,
+	ElPagination,
+	ElDivider,
+	ElIcon,
+} from "element-plus";
 import { useTable, useSelection } from "@suite-kit/hooks";
 import { ColumnProps } from "./index";
-import { Refresh, Operation, Search } from "@element-plus/icons-vue";
+import { Refresh, Operation, Search, Rank } from "@element-plus/icons-vue";
 import { handleProp } from "@suite-kit/utils";
 import SearchForm from "./components/SearchForm/index.vue";
 import TableColumn from "./components/Column.vue";
-import type { ProTableProps } from "./types";
+import type { PaginationConfig, ProTableProps } from "./types";
 
 //允许放置
 const allowDrop = (draggingNode: any, dropNode: any, type: string) => {
@@ -154,6 +169,12 @@ const dropSuccess = (draggingNode: any) => {
 const filterTreeNode = (value: any, data: any) => {
 	return data.isShow && !data.type;
 };
+
+// tree check事件
+const treeCheckChange = (data: ColumnProps, checked: boolean, leaf: boolean) => {
+	data.isShow = checked || leaf;
+};
+
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
 	columns: () => [],
@@ -166,6 +187,22 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 	searchCol: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
 
+// default pagination props
+const defaultPaginationProps = {
+	background: false,
+	layout: "total, sizes, prev, pager, next, jumper",
+};
+// pagination props
+const paginationProps = computed<PaginationConfig>(() => {
+	if (typeof props.pagination == "boolean") {
+		return {
+			background: false,
+			layout: "total, sizes, prev, pager, next, jumper",
+		};
+	} else {
+		return Object.assign(defaultPaginationProps, props.pagination);
+	}
+});
 // 是否显示搜索模块
 const isShowSearch = ref(true);
 
@@ -197,13 +234,10 @@ const clearSelection = () => tableRef.value!.clearSelection();
 
 // 初始化请求
 onMounted(() => {
-	props.requestAuto && getTableList();
+	props.requestAuto && tableEmits.request();
 	colSettingRef.value?.setCheckedNodes(colSetting);
 	colSettingRef.value?.filter();
 });
-
-// 监听页面 initParam 改化，重新获取表格数据
-watch(() => props.initParam, getTableList, { deep: true });
 
 // 接收 columns 并设置为响应式
 const tableColumns = ref<ColumnProps[]>(props.columns);
@@ -280,5 +314,31 @@ defineExpose({
 	selectedList,
 	selectedListIds,
 });
+
+// 组件事件
+const emits = defineEmits<{
+	(key: "search" | "refresh" | "request" | "reset"): void;
+}>();
+const tableEmits = {
+	search() {
+		search();
+		emits("search");
+	},
+	reset() {
+		reset();
+		emits("reset");
+	},
+	request() {
+		getTableList();
+		emits("request");
+	},
+	refresh() {
+		getTableList();
+		emits("refresh");
+	},
+};
+
+// 监听页面 initParam 改化，重新获取表格数据
+watch(() => props.initParam, tableEmits.request, { deep: true });
 </script>
 <style lang="scss" scoped></style>

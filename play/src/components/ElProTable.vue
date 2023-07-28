@@ -1,7 +1,5 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback" title="用户信息表" :pagination="{
-		
-	}">
+	<ProTable :request-api="fetchData" :columns="columns" title="用户信息表">
 		<template #tableHeader>
 			<el-button type="warning" @click="changeEnum">警告</el-button>
 		</template>
@@ -9,25 +7,27 @@
 </template>
 <script setup lang="tsx">
 import ProTable from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import type { ColumnProps } from "@suite-kit/el-protable";
 import { fetchData } from "../fetch";
 import { reactive, ref } from "vue";
 import { ElButton } from "element-plus";
-
 defineOptions({
 	name: "Test-El-ProTable",
 });
-
 const changeEnum = () => {
-	enumGender.value = [
-		{ label: "张三", value: 1 },
-		{ label: "李四", value: 0 },
-	];
+	enumGender.value.length = 0;
+	enumGender.value.push(
+		...[
+			{ label: "张三", value: 1 },
+			{ label: "李四", value: 0 },
+		],
+	);
 	columns[1].label = "四川";
-};
-
-const dataCallback = (data: any) => {
-	return data;
+	columns.push({
+		label: "测试",
+		prop: "test",
+		isShow: true,
+	});
 };
 
 const enumGender = ref([
@@ -39,7 +39,7 @@ const columns = reactive<ColumnProps[]>([
 		type: "selection",
 	},
 	{
-		label: "用户",
+		label: "用户超级长用户超级长用户超级长用户超级长",
 		prop: "user",
 		tip: "222222",
 		_children: [
