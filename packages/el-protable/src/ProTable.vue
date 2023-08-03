@@ -48,7 +48,9 @@
 									@check-change="treeCheckChange"
 								>
 									<template #default="{ data }">
-										<div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+										<div
+											style="display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 1em"
+										>
 											<span>{{ data.label }}</span>
 											<el-icon> <Rank></Rank> </el-icon>
 										</div>
@@ -289,7 +291,6 @@ const flatColumns = ref<ColumnProps[]>();
 watch(
 	tableColumns,
 	n => {
-		console.log(n);
 		flatColumns.value = flatColumnsFunc(n);
 	},
 	{ immediate: true },
@@ -326,12 +327,11 @@ const colSetting = tableColumns.map(item => {
 onMounted(() => {
 	setTimeout(() => {
 		useSortable(document.body.getElementsByClassName("el-table__row")[0].parentElement, tableData, {
-			onUpdate() {},
+			onUpdate({ newIndex, oldIndex }) {
+				emits("drag-sort", newIndex, oldIndex, unref(tableData));
+			},
 			handle: ".el-protable-drag-handle",
 			animation: 200,
-			fallbackOnBody: true,
-			invertSwap: true,
-			group: "nested",
 		});
 	}, 0);
 });
@@ -358,6 +358,7 @@ defineExpose({
 // 组件事件
 const emits = defineEmits<{
 	(key: "search" | "refresh" | "request" | "reset"): void;
+	(key: "drag-sort", newIndex: number | undefined, oldIndex: number | undefined, data: any[]): void;
 }>();
 const tableEmits = {
 	search() {

@@ -26,13 +26,6 @@ function generatedData(query: Partial<Row> & { pageSize: number; pageNum: number
 				cascader: query.gender ?? index % 2 == 0 ? 0 : 1,
 				time: query.time ?? new Date().getTime(),
 				id: window.crypto.randomUUID(),
-				children: [
-					{
-						name: query.name ?? `李四${index}`,
-						age: query.age ?? index * 10 + 1,
-						id: window.crypto.randomUUID(),
-					},
-				],
 			};
 		});
 }
