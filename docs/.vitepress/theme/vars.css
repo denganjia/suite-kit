@@ -4,3 +4,19 @@
 .vp-doc table {
 	margin: unset;
 }
+.vp-doc th,
+.vp-doc tr,
+.vp-doc td {
+	border: unset;
+}
+.vp-doc ul,.vp-doc ol{
+	padding: unset;
+	margin: unset;
+}
+
+:root{
+	--vp-layout-max-width:1800px
+}
+.vp-doc li + li {
+    margin: 0;
+}

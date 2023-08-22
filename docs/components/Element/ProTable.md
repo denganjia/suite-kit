@@ -2,7 +2,7 @@
 ---
 
 <script setup>
-  import Basic from "../../examples/Element/ProTable/basic.vue"
+  import Basic from '../../examples/Element/ProTable/basic.vue';
 </script>
 
 # ProTable 超级表格
