@@ -5,11 +5,15 @@ import "element-plus/dist/index.css";
 import "element-plus/theme-chalk/dark/css-vars.css";
 import "@suite-kit/el-protable/dist/style.css";
 import MyLayout from "./components/Layout.vue";
+import { globals } from "../vitepress";
 
 export default {
-  ...DefaultTheme,
-  enhaceApp(ctx: EnhanceAppContext) {
-    DefaultTheme.enhanceApp(ctx);
+  extends: DefaultTheme,
+  enhanceApp(ctx: EnhanceAppContext) {
+    globals.forEach(([name, Comp]) => {
+      ctx.app.component(name, Comp);
+    });
   },
   Layout: MyLayout,
+  // extends: DefaultTheme,
 };

@@ -11,7 +11,6 @@ import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 
 const { Layout } = DefaultTheme;
-console.log(Layout);
 defineOptions({ name: "MyLayout" });
 </script>
 
