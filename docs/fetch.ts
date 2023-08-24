@@ -25,14 +25,14 @@ const generateData = (query: Query) => {
     });
 };
 
-export const getDataApi = (params?: any) => {
+export const getDataApi = async (params?: any) => {
   console.log(params);
-  return {
+  return Promise.resolve({
     code: 200,
     data: {
       list: generateData(params),
       total: 50,
       pageSize: params.pageSize,
     },
-  };
+  });
 };

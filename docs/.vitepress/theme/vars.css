@@ -1,22 +1,28 @@
 .VPDoc.has-aside .content-container {
-	max-width: unset !important;
+    max-width: unset !important;
 }
+
 .vp-doc table {
-	margin: unset;
+    margin: unset;
 }
+
 .vp-doc th,
 .vp-doc tr,
 .vp-doc td {
-	border: unset;
-}
-.vp-doc ul,.vp-doc ol{
-	padding: unset;
-	margin: unset;
+    border: unset;
 }
 
-:root{
-	--vp-layout-max-width:1800px
+.vp-doc ul, .vp-doc ol {
+    padding: unset;
+    margin: unset;
 }
+
+:root {
+    --vp-layout-max-width: 1800px;
+    --vp-home-hero-image-background-image: linear-gradient(to right bottom, #d1cac1, #d5bc9f, #d9ad7f, #de9c60, #e28a44);;
+    --vp-home-hero-image-filter: blur(72px);
+}
+
 .vp-doc li + li {
     margin: 0;
 }

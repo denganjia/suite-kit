@@ -6,9 +6,12 @@
 
 <script setup lang="ts">
 import ProTable from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import { ColumnProps, ProTableInstance } from "@suite-kit/el-protable";
 import { getDataApi } from "../../../fetch";
 import { dayjs } from "element-plus";
+import { ref } from "vue";
+
+let table = ref<ProTableInstance>();
 
 const columns: ColumnProps[] = [
   { label: "姓名", prop: "name", search: { el: "text" } },

@@ -1,5 +1,5 @@
 import { ComponentPublicInstance } from "vue";
-import ProTable from "./ProTable.vue";
+import ProTable from "./index.vue";
 import { ProTableProps } from "./types";
 import "./style.scss";
 

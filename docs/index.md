@@ -19,7 +19,7 @@ hero:
       text: 在 Github 上查看
       # link: https://github.com/HalseySpicy/Geeker-Admin
   image:
-    src: /home.png
+    src: /astronaut.png
 features:
   - icon: 🔥
     title: 流行技术栈
