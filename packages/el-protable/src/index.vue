@@ -70,7 +70,9 @@
                       "
                     >
                       <span>{{ data.label }}</span>
-                      <el-icon> <Rank></Rank> </el-icon>
+                      <el-icon>
+                        <Rank></Rank>
+                      </el-icon>
                     </div>
                   </template>
                 </el-tree>
@@ -88,7 +90,7 @@
         <el-table
           ref="tableRef"
           v-bind="$attrs"
-          :data="data ?? tableData"
+          :data="cacheData"
           :border="border"
           :row-key="rowKey"
           @selection-change="selectionChange"
@@ -100,11 +102,12 @@
             <el-table-column
               v-if="
                 item.type &&
-                ['selection', 'index', 'expand'].includes(item.type)
+                ['selection', 'index', 'expand', 'drag'].includes(item.type)
               "
               v-bind="item"
               :align="item.align ?? 'center'"
               :reserve-selection="item.type == 'selection'"
+              :width="item.type === 'drag' ? '48px' : item.width"
             >
               <template v-if="item.type == 'expand'" #default="scope">
                 <component
@@ -114,21 +117,28 @@
                 ></component>
                 <slot v-else :name="item.type" v-bind="scope"></slot>
               </template>
+              <template v-if="item.type === 'drag'">
+                <div class="el-protable-drag-handle">
+                  <el-icon>
+                    <DCaret></DCaret>
+                  </el-icon>
+                </div>
+              </template>
             </el-table-column>
-            <el-table-column
-              v-else-if="item.type == 'drag'"
-              min-width="0"
-              :resizable="false"
-              width="48px"
-              align="center"
-              type=""
-            >
-              <div class="el-protable-drag-handle">
-                <el-icon>
-                  <DCaret></DCaret>
-                </el-icon>
-              </div>
-            </el-table-column>
+            <!--            <el-table-column-->
+            <!--              v-else-if="item.type == 'drag'"-->
+            <!--              min-width="0"-->
+            <!--              :resizable="false"-->
+            <!--              width="48px"-->
+            <!--              align="center"-->
+            <!--              type=""-->
+            <!--            >-->
+            <!--              <div class="el-protable-drag-handle">-->
+            <!--                <el-icon>-->
+            <!--                  <DCaret></DCaret>-->
+            <!--                </el-icon>-->
+            <!--              </div>-->
+            <!--            </el-table-column>-->
             <!-- other -->
             <ElProTableColumn
               v-if="!item.type && item.prop && item.isShow"
@@ -172,6 +182,7 @@
 
 <script setup lang="ts">
 import { useSortable } from "@vueuse/integrations/useSortable";
+
 defineOptions({
   name: "ElProTable",
 });
@@ -274,6 +285,18 @@ const tableRef = ref<InstanceType<typeof ElTable>>();
 const { selectionChange, selectedList, selectedListIds, isSelected } =
   useSelection(props.rowKey);
 
+// 处理没有传递request-api而是传递data
+const cacheData = computed(() => {
+  if (props.data) {
+    pageable.value.total = props.data.length;
+    return props.data.slice(
+      (pageable.value.pageNum - 1) * pageable.value.pageSize,
+      pageable.value.pageSize * pageable.value.pageNum
+    );
+  } else {
+    return tableData.value;
+  }
+});
 // 表格操作 Hooks
 const {
   tableData,

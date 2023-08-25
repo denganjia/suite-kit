@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import {
+  ElDivider,
+  ElTooltip,
+  ElIcon,
+  ElCollapseTransition,
+  ElMessage,
+} from "element-plus";
 import { computed, getCurrentInstance, ref } from "vue";
 import { isClient, useClipboard, useToggle } from "@vueuse/core";
-import { CaretTop } from "@element-plus/icons-vue";
+import { CaretTop, Hide, CopyDocument } from "@element-plus/icons-vue";
 import Example from "./demo/vp-example.vue";
 import SourceCode from "./demo/vp-source-code.vue";
 
@@ -25,9 +32,9 @@ const [sourceVisible, toggleSourceVisible] = useToggle();
 const sourceCodeRef = ref<HTMLButtonElement>();
 const formatPathDemos = computed(() => {
   const demos = {};
-  console.log(props.demos);
   Object.keys(props.demos).forEach((key) => {
-    demos[key.split("/")[key.split("/").length - 1]] = props.demos[key].default;
+    demos[key.replace("../../examples/", "").replace(".vue", "")] =
+      props.demos[key].default;
   });
 
   return demos;
@@ -36,12 +43,6 @@ const formatPathDemos = computed(() => {
 const decodedDescription = computed(() =>
   decodeURIComponent(props.description!)
 );
-
-const onPlaygroundClick = () => {
-  const { link } = usePlayground(props.rawSource);
-  if (!isClient) return;
-  window.open(link);
-};
 
 const onSourceVisibleKeydown = (e: KeyboardEvent) => {
   if (["Enter", "Space"].includes(e.code)) {
@@ -52,15 +53,14 @@ const onSourceVisibleKeydown = (e: KeyboardEvent) => {
 };
 
 const copyCode = async () => {
-  const { $message } = vm.appContext.config.globalProperties;
   if (!isSupported) {
-    $message.error(locale.value["copy-error"]);
+    ElMessage.error("copy-error");
   }
   try {
     await copy();
-    $message.success(locale.value["copy-success"]);
+    ElMessage.success("copy-success");
   } catch (e: any) {
-    $message.error(e.message);
+    ElMessage.error(e.message);
   }
 };
 </script>
@@ -69,52 +69,10 @@ const copyCode = async () => {
   <ClientOnly>
     <!-- danger here DO NOT USE INLINE SCRIPT TAG -->
     <p text="sm" v-html="decodedDescription" />
-
     <div class="example">
       <Example :file="path" :demo="formatPathDemos[path]" />
-
       <ElDivider class="m-0" />
-
       <div class="op-btns">
-        <ElTooltip
-          :content="'edit-in-editor'"
-          :show-arrow="false"
-          :trigger="['hover', 'focus']"
-          :trigger-keys="[]"
-        >
-          <ElIcon
-            :size="16"
-            :aria-label="'edit-in-editor'"
-            tabindex="0"
-            role="link"
-            class="op-btn"
-            @click="onPlaygroundClick"
-            @keydown.prevent.enter="onPlaygroundClick"
-            @keydown.prevent.space="onPlaygroundClick"
-          >
-            <i-ri-flask-line />
-          </ElIcon>
-        </ElTooltip>
-        <ElTooltip
-          :content="'edit-on-github'"
-          :show-arrow="false"
-          :trigger="['hover', 'focus']"
-          :trigger-keys="[]"
-        >
-          <ElIcon
-            :size="16"
-            class="op-btn github"
-            style="color: var(--text-color-light)"
-          >
-            <a
-              :aria-label="'edit-on-github'"
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              <i-ri-github-line />
-            </a>
-          </ElIcon>
-        </ElTooltip>
         <ElTooltip
           :content="'copy-code'"
           :show-arrow="false"
@@ -131,7 +89,7 @@ const copyCode = async () => {
             @keydown.prevent.enter="copyCode"
             @keydown.prevent.space="copyCode"
           >
-            <i-ri-file-copy-line />
+            <CopyDocument></CopyDocument>
           </ElIcon>
         </ElTooltip>
         <ElTooltip
@@ -147,7 +105,7 @@ const copyCode = async () => {
             @click="toggleSourceVisible()"
           >
             <ElIcon :size="16">
-              <i-ri-code-line />
+              <Hide></Hide>
             </ElIcon>
           </button>
         </ElTooltip>
@@ -178,8 +136,12 @@ const copyCode = async () => {
 
 <style scoped lang="scss">
 .example {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--el-border-color);
   border-radius: var(--el-border-radius-base);
+
+  .m-0 {
+    margin: 0;
+  }
 
   .op-btns {
     padding: 0.5rem;
@@ -229,6 +191,7 @@ const copyCode = async () => {
     right: 0;
     bottom: 0;
     z-index: 10;
+
     span {
       font-size: 14px;
       margin-left: 10px;

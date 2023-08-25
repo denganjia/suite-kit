@@ -2,10 +2,15 @@ import fs from "fs";
 import path from "path";
 import MarkdownIt from "markdown-it";
 import mdContainer from "markdown-it-container";
+import { highlight } from "./hightlight";
+import type Token from "markdown-it/lib/token";
+import type Renderer from "markdown-it/lib/renderer";
 
 interface ContainerOpts {
   marker?: string | undefined;
+
   validate?(params: string): boolean;
+
   render?(
     tokens: Token[],
     index: number,
@@ -14,6 +19,7 @@ interface ContainerOpts {
     self: Renderer
   ): string;
 }
+
 export const mdPlugin = (md: MarkdownIt) => {
   md.use(mdContainer, "demo", {
     validate(params) {
@@ -27,17 +33,17 @@ export const mdPlugin = (md: MarkdownIt) => {
         const sourceFileToken = tokens[idx + 2];
         let source = "";
         const sourceFile = sourceFileToken.children?.[0].content ?? "";
-
+        console.log(sourceFile);
         if (sourceFileToken.type === "inline") {
           source = fs.readFileSync(
-            path.resolve("examples/Element/ProTable", `${sourceFile}`),
+            path.resolve("examples", `${sourceFile}.vue`),
             "utf-8"
           );
         }
         if (!source) throw new Error(`Incorrect source file: ${sourceFile}`);
 
         return `<Demo :demos="demos" source="${encodeURIComponent(
-          source
+          highlight(source, "vue")
         )}" path="${sourceFile}" raw-source="${encodeURIComponent(
           source
         )}" description="${encodeURIComponent(description)}">`;

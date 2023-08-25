@@ -2,29 +2,7 @@ import type { VNode, Ref, Component } from "vue";
 import type { BreakPoint, Responsive } from "@suite-kit/grid";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import type { Table } from "@suite-kit/hooks";
-export type PropsType<T> = {
-  [K in keyof T]: T[K] extends { type: import("vue").PropType<infer P> }
-    ? PropsType<P>
-    : T[K] extends new (value?: any) => infer ConstructorType
-    ? ConstructorType
-    : T[K] extends import("element-plus/es/utils").EpPropFinalized<
-        infer Type,
-        infer Value,
-        infer Validator,
-        infer Default,
-        infer Required
-      >
-    ? Default
-    : T[K] extends import("element-plus/es/utils").EpPropMergeType<
-        infer MergeType,
-        any,
-        any
-      >
-    ? MergeType extends new (...args: any) => any
-      ? InstanceType<MergeType>
-      : never
-    : T[K];
-};
+
 type ToolButtonConfig = ["refresh", "setting", "search"] | boolean;
 
 export type PaginationConfig = {
@@ -43,6 +21,7 @@ export type PaginationConfig = {
   disabled?: boolean;
   hideOnSinglePage?: boolean;
 };
+
 export interface ProTableProps {
   columns: ColumnProps[]; // 列配置项  ==> 必传
   data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
@@ -59,11 +38,12 @@ export interface ProTableProps {
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   searchCol?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
 }
+
 export interface EnumProps {
   label?: string; // 选项框显示的文字
   value?: string | number | boolean | any[]; // 选项框值
   disabled?: boolean; // 是否禁用此选项
-  tagType?: string; // 当 tag 为 true 时，此选择会指定 tag 显示类型
+  tagType?: "success" | "info" | "warning" | "danger"; // 当 tag 为 true 时，此选择会指定 tag 显示类型
   children?: EnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
   [key: string]: any;
 }
@@ -71,17 +51,17 @@ export interface EnumProps {
 export type TypeProps = "index" | "selection" | "expand" | "drag";
 
 export type SearchType =
-  | "text"
-  | "number"
-  | "select"
-  | "select-v2"
-  | "tree-select"
-  | "cascader"
-  | "date-picker"
-  | "time-picker"
-  | "time-select"
-  | "switch"
-  | "slider";
+  | "text" // 文本框
+  | "number" // 数字输入框
+  | "select" // 下拉选择框
+  | "select-v2" // 下拉选择框v2
+  | "tree-select" // 树形选择器
+  | "cascader" // 级联选择器
+  | "date-picker" // 日期选择器
+  | "time-picker" // 时间选择器
+  | "time-select" // 时间选择框
+  | "switch" // 开关
+  | "slider"; // 滑块
 
 export type SearchRenderScope = {
   searchParam: { [key: string]: any };
@@ -122,8 +102,9 @@ export type HeaderRenderScope<T> = {
 
 export interface ColumnProps<T = any>
   extends Partial<
-    Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader">
+    Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader" | "type">
   > {
+  type?: TypeProps;
   tag?: boolean; // 是否是标签展示
   isShow?: boolean | Ref<boolean>; // 是否显示在表格当中
   search?: SearchProps; // 搜索项配置
