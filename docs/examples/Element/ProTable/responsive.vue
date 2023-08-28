@@ -28,7 +28,14 @@ const columns: ColumnProps[] = [
     render({ row }) {
       return dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss");
     },
-    search: { el: "date-picker" },
+    search: {
+      el: "date-picker",
+      props: { type: "datetimerange" },
+      // 设置响应式列
+      span: 2,
+      // 设置表单项排序
+      order: 1,
+    },
   },
 ];
 </script>

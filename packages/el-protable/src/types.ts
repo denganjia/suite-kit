@@ -1,7 +1,8 @@
-import type { VNode, Ref, Component } from "vue";
+import type { Ref, Component } from "vue";
 import type { BreakPoint, Responsive } from "@suite-kit/grid";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import type { Table } from "@suite-kit/hooks";
+import { VNodeChild } from "@vue/runtime-core";
 
 type ToolButtonConfig = ["refresh", "setting", "search"] | boolean;
 
@@ -78,7 +79,7 @@ export type SearchProps = {
   span?: number; // 搜索项所占用的列数，默认为1列
   offset?: number; // 搜索字段左侧偏移列数
   defaultValue?: any; // 搜索项默认值
-  render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx语法）
+  render?: (scope: SearchRenderScope) => VNodeChild; // 自定义搜索内容渲染（tsx语法）
 } & Partial<Record<BreakPoint, Responsive>>;
 
 export type FieldNamesProps = {
@@ -111,7 +112,7 @@ export interface ColumnProps<T = any>
   enum?: EnumProps[] | ((params?: any) => Promise<any>) | Ref<EnumProps[]>; // 枚举类型（字典）
   isFilterEnum?: boolean; // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
   fieldNames?: FieldNamesProps; // 指定 label && value && children 的 key 值
-  headerRender?: (scope: HeaderRenderScope<T>) => VNode; // 自定义表头内容渲染（tsx语法）
-  render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx语法）
+  headerRender?: (scope: HeaderRenderScope<T>) => VNodeChild; // 自定义表头内容渲染（tsx语法）
+  render?: (scope: RenderScope<T>) => VNodeChild; // 自定义单元格内容渲染（tsx语法）
   _children?: ColumnProps<T>[]; // 多级表头
 }

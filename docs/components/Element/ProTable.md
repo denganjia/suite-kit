@@ -20,6 +20,33 @@ Element/ProTable/basic
 Element/ProTable/data
 :::
 
+## 自定义表格渲染
+
+如果需要自定义表格渲染，可以在column上传递`headerRender`和`render`属性，或者使用[插槽](#插槽)
+
+:::demo
+Element/ProTable/render
+:::
+
+## 自定义搜索项
+
+如果需要自定义搜索项，可以在`column.search`上传递`render`属性。非不得已的情况下，不推荐自定义搜索项，因为无论是使用`h`
+函数还是使用`jsx`对新手都极不友好
+
+:::demo
+Element/ProTable/renderForm
+:::
+
+## 响应式搜索表单
+
+搜索表单使用`@suite-kit/Grid`构建，支持响应式。
+
+默认响应式配置是`{ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }`，一个搜索项占一列，可以根据需要自行配置，同时可设置搜索项展示的顺序，默认是按照columns的顺序展示
+
+:::demo
+Element/ProTable/responsive
+:::
+
 ## 属性
 
 ::: tip
@@ -46,7 +73,32 @@ Element/ProTable/data
 
 ## 插槽
 
+| 插槽名                 | 说明                                                                                                                                      |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| default             | `ElTable`默认插槽                                                                                                                           |
+| append              | 插入至表格最后一行之后的内容， 如果需要对表格的内容进行无限滚动操作，可能需要用到这个 slot。 若表格有合计行，该 slot 会位于合计行之上。                                                              |
+| empty               | 	当数据为空时自定义的内容                                                                                                                           |
+| tableHeader         | 表格头部左侧区域插槽                                                                                                                              |
+| toolButton          | 表格头部右侧区域插槽                                                                                                                              |
+| `column.prop`       | 表格列具名插槽。示例：如果有个列的prop属性是`type`，那`suite-kit/ElProTable`中也会有一个 `<slot name="type"></slot>`的插槽                                             |
+| `column.prop`Header | 表格列表头部分具名插槽。示例：如果有个列的prop属性是`type`，那`suite-kit/ElProTable`中也会有一个 `<slot name="typeHeader"></slot>`的插槽。推荐使用[headerRender](#columnsprops) |                                                                                |
+| pagination          | 分页器                                                                                                                                     |
+
 ## 事件
+
+:::tip
+`suite-kit/ElProTable`继承了`ElTable`中除`selection-change`
+外的所有事件。参考[Table事件](https://element-plus.org/zh-CN/component/table.html#table-%E4%BA%8B%E4%BB%B6)
+:::
+以下是`suite-kit/ElProTable`独有事件
+
+| 事件名       | 说明                         | 参数                       |
+|-----------|----------------------------|--------------------------|
+| search    | 搜索时触发                      |                          |
+| refresh   | 刷新时触发                      |                          |
+| request   | 请求数据时触发，在使用`data`时**不会触发** |                          |
+| reset     | 重置搜索表单数据后触发                |                          |
+| drag-sort | 拖拽排序后触发                    | (newIndex,oldIndex,data) |
 
 ## 类型
 
@@ -59,18 +111,18 @@ Element/ProTable/data
 **所有属性均为非必传**
 :::
 
-| 属性名          | 描述                                         | 类型                                                                                    |
-|--------------|--------------------------------------------|---------------------------------------------------------------------------------------|
-| type         | 列类型                                        | `"index"` \| `"selection"` \| `"expand"` \| `"drag"`                                  |
-| tag          | 数据是否通过`el-tag`渲染，需要配合`enum`使用              | `boolean`                                                                             |
-| isShow       | 是否在表格显示当前列                                 | `boolean \| Ref<boolean>`                                                             |
-| search       | 搜索配置                                       | [`SearchProps`](#searchprops)                                                         |
-| enum         | 枚举字典                                       | [`EnumProps`](#enumprops)[] \| `((params?: any) => Promise<any>) \| Ref<EnumProps[]>` |
-| isFilterEnum | 当前单元格值是否根据 `enum` 格式化                      | `boolean`                                                                             |
-| fieldNames   | 指定从`enum`中获取`label`、`value`、`children`的属性值 | `{label:string,value:string,children?:string}`                                        |
-| headerRender | 自定义表头渲染                                    | `({column,$index})=>VNode`                                                            |
-| render       | 自定义单元格渲染，也可以在组件上使用同`prop`名称具名插槽            | `({column,$index})=>VNode`                                                            |
-| _children    | 多级表头                                       | [`ColumnProps`](#columnsprops)[]                                                      |
+| 属性名          | 描述                                          | 类型                                                                                    |
+|--------------|---------------------------------------------|---------------------------------------------------------------------------------------|
+| type         | 列类型                                         | `"index"` \| `"selection"` \| `"expand"` \| `"drag"`                                  |
+| tag          | 数据是否通过`el-tag`渲染，需要配合`enum`使用               | `boolean`                                                                             |
+| isShow       | 是否在表格显示当前列                                  | `boolean \| Ref<boolean>`                                                             |
+| search       | 搜索配置                                        | [`SearchProps`](#searchprops)                                                         |
+| enum         | 枚举字典                                        | [`EnumProps`](#enumprops)[] \| `((params?: any) => Promise<any>) \| Ref<EnumProps[]>` |
+| isFilterEnum | 当前单元格值是否根据 `enum` 格式化                       | `boolean`                                                                             |
+| fieldNames   | 指定从`enum`中获取`label`、`value`、`children`的属性值  | `{label:string,value:string,children?:string}`                                        |
+| headerRender | 自定义表头渲染，优先级**高于**插槽                         | `({column,$index})=>VNode`                                                            |
+| render       | 自定义单元格渲染，也可以在组件上使用同`prop`名称具名插槽，优先级**高于**插槽 | `({column,$index})=>VNode`                                                            |
+| _children    | 多级表头                                        | [`ColumnProps`](#columnsprops)[]                                                      |
 
 ```typescript
 export interface ColumnProps<T = any>

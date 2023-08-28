@@ -1,5 +1,5 @@
 <template>
-  <ElConfigProvider :locale="zhCn" :button="{ autoInsertSpace: true }">
+  <ElConfigProvider :locale="zhCn">
     <Layout> </Layout>
   </ElConfigProvider>
 </template>
