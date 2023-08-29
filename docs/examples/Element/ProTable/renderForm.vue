@@ -50,7 +50,7 @@ const columns: ColumnProps[] = [
     label: "姓名",
     prop: "name",
     search: {
-      // 使用自己的渲染函数
+      // 使用渲染函数
       render(scope: SearchRenderScope) {
         return (
           <ElAutocomplete
@@ -85,7 +85,6 @@ const columns: ColumnProps[] = [
     render({ row }) {
       return dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss");
     },
-    search: { el: "date-picker" },
   },
 ];
 </script>

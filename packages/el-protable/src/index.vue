@@ -398,7 +398,6 @@ const colSetting = tableColumns.map((item) => {
 });
 // 行拖拽
 // 表格主体
-// const tBody = ref<HTMLElement | null>();
 onMounted(() => {
   setTimeout(() => {
     useSortable(
@@ -418,7 +417,7 @@ onMounted(() => {
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
   element: tableRef,
-  tableData,
+  tableData: cacheData,
   pageable,
   searchParam,
   searchInitParam,

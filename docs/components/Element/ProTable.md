@@ -12,7 +12,7 @@
 Element/ProTable/basic
 :::
 
-## 本地数据
+## 使用本地数据
 
 如果不想使用`request-api`，你可以直接传递`data`属性，数据会直接传递到`el-table`上
 
@@ -23,6 +23,8 @@ Element/ProTable/data
 ## 自定义表格渲染
 
 如果需要自定义表格渲染，可以在column上传递`headerRender`和`render`属性，或者使用[插槽](#插槽)
+
+对于表格操作列，推荐的`prop`名称是operation
 
 :::demo
 Element/ProTable/render
@@ -41,11 +43,38 @@ Element/ProTable/renderForm
 
 搜索表单使用`@suite-kit/Grid`构建，支持响应式。
 
-默认响应式配置是`{ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }`，一个搜索项占一列，可以根据需要自行配置，同时可设置搜索项展示的顺序，默认是按照columns的顺序展示
+默认响应式配置是`{ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }`，一个搜索项占一列，可以根据需要自行配置，同时可设置`order`
+来改变搜索项展示的顺序，默认是按照columns的顺序展示
 
 :::demo
 Element/ProTable/responsive
 :::
+
+## 使用函数式enum
+
+对于一些需要使用字段或者枚举值来格式化的数据来说，enum除了可以传确切的值意外，还可以使用一个函数
+
+::: tip
+如果要使用函数，请注意函数的返回值**必须**是一个对象，且enum数据要在对象的data属性中
+:::
+
+::: demo
+Element/ProTable/enumFunction
+:::
+
+## 下拉框远程搜索
+
+远程搜索请参考[el-select远程搜索](https://element-plus.org/zh-CN/component/select.html#%E8%BF%9C%E7%A8%8B%E6%90%9C%E7%B4%A2)。
+
+:::demo
+Element/ProTable/remoteSearch
+:::
+
+## 搜索项联动
+
+## 搜索项默认值为后端数据
+
+## 拖动
 
 ## 属性
 
@@ -100,9 +129,31 @@ Element/ProTable/responsive
 | reset     | 重置搜索表单数据后触发                |                          |
 | drag-sort | 拖拽排序后触发                    | (newIndex,oldIndex,data) |
 
-## 类型
+## 实例
 
-### ColumnsProps
+以下是通过ref获取到`suite-kit/ElProTable`的实例的属性
+
+你可以从`@suite-kit/el-protable`中导入`ProTableInstance`类型
+
+| 名称                  | 描述                                                                 | 类型                                                  |
+|---------------------|--------------------------------------------------------------------|-----------------------------------------------------|
+| element             | 内部`el-table`的实例                                                    | `Ref<InstanceType<typeof ElTable>>`                 |
+| enumMap             | 收集的字典                                                              | `Ref<Map<string,{[key:string]:any}[]>>`             |
+| tableData           | 表格数据                                                               | `any[]`                                             |
+| pageable            | 分页配置                                                               | `{pageNum: number;pageSize: number;total: number;}` |
+| searchParam         | 搜索表单绑定值                                                            | `{[key:string]:any}`                                |
+| searchInitParam     | 初始化搜索参数                                                            | `{[key:string]:any}`                                |
+| getTableList        | 手动调用传入的`request-api`，未执行`search`之前只会携带`searchInitParam`，不会携带搜索表单数据 | `()=>void`                                          |
+| search              | 主要用于将搜索表单的数据合并到总搜索参数中再执行`getTableList`                             | `()=>void`                                          |
+| rest                | 重置搜索表单，将所有参数还原（如果有），再执行`getTableList`                              | `()=>void`                                          |
+| handleSizeChange    | 手动设置分页器每页条数                                                        | `(val:number)=>void`                                |
+| handleCurrentChange | 手动设置分页器当前页                                                         | `(val:number)=>void`                                |
+| clearSelection      | 清空表格所选数据，其实就是el-table的clearSelection                               | `()=>void`                                          |
+| isSelected          | 当前是否有选择的数据                                                         | `Ref<boolean>`                                      |
+| selectedList        | 选择的数据                                                              | `Ref<any[]>`                                        |
+| selectedListIds     | 选择的数据的`row-key`，row-key默认是`id`                                     | `Ref<string[]>`                                     |
+
+## ColumnsProps
 
 ::: tip
 `ColumnProps`包含了`ElTableColumn`中除`children`,`renderCell`,`renderHeader`,`type`
@@ -111,53 +162,39 @@ Element/ProTable/responsive
 **所有属性均为非必传**
 :::
 
-| 属性名          | 描述                                          | 类型                                                                                    |
-|--------------|---------------------------------------------|---------------------------------------------------------------------------------------|
-| type         | 列类型                                         | `"index"` \| `"selection"` \| `"expand"` \| `"drag"`                                  |
-| tag          | 数据是否通过`el-tag`渲染，需要配合`enum`使用               | `boolean`                                                                             |
-| isShow       | 是否在表格显示当前列                                  | `boolean \| Ref<boolean>`                                                             |
-| search       | 搜索配置                                        | [`SearchProps`](#searchprops)                                                         |
-| enum         | 枚举字典                                        | [`EnumProps`](#enumprops)[] \| `((params?: any) => Promise<any>) \| Ref<EnumProps[]>` |
-| isFilterEnum | 当前单元格值是否根据 `enum` 格式化                       | `boolean`                                                                             |
-| fieldNames   | 指定从`enum`中获取`label`、`value`、`children`的属性值  | `{label:string,value:string,children?:string}`                                        |
-| headerRender | 自定义表头渲染，优先级**高于**插槽                         | `({column,$index})=>VNode`                                                            |
-| render       | 自定义单元格渲染，也可以在组件上使用同`prop`名称具名插槽，优先级**高于**插槽 | `({column,$index})=>VNode`                                                            |
-| _children    | 多级表头                                        | [`ColumnProps`](#columnsprops)[]                                                      |
+| 属性名          | 描述                                          | 类型                                                                                            |
+|--------------|---------------------------------------------|-----------------------------------------------------------------------------------------------|
+| type         | 列类型                                         | `"index"` \| `"selection"` \| `"expand"` \| `"drag"`                                          |
+| tag          | 数据是否通过`el-tag`渲染，需要配合`enum`使用               | `boolean`                                                                                     |
+| isShow       | 是否在表格显示当前列                                  | `boolean \| Ref<boolean>`                                                                     |
+| search       | 搜索配置                                        | [`SearchProps`](#searchprops)                                                                 |
+| enum         | 枚举字典                                        | [`EnumProps`](#typescript)[] \| `((params?: any) => Promise<{data:any}>) \| Ref<EnumProps[]>` |
+| isFilterEnum | 当前单元格值是否根据 `enum` 格式化，默认为`true`             | `boolean`                                                                                     |
+| fieldNames   | 指定从`enum`中获取`label`、`value`、`children`的属性值  | `{label:string,value:string,children?:string}`                                                |
+| headerRender | 自定义表头渲染，优先级**高于**插槽                         | `({column,$index})=>VNode`                                                                    |
+| render       | 自定义单元格渲染，也可以在组件上使用同`prop`名称具名插槽，优先级**高于**插槽 | `({column,$index})=>VNode`                                                                    |
+| _children    | 多级表头                                        | [`ColumnProps`](#columnsprops)[]                                                              |
 
-```typescript
-export interface ColumnProps<T = any>
-  extends Partial<
-    Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader" | "type">
-  > {
-  type?: "index" | "selection" | "expand" | "drag";
-  tag?: boolean; // 是否是标签展示
-  isShow?: boolean | Ref<boolean>; // 是否显示在表格当中
-  search?: SearchProps; // 搜索项配置
-  enum?: EnumProps[] | ((params?: any) => Promise<any>) | Ref<EnumProps[]>; // 枚举类型（字典）
-  isFilterEnum?: boolean; // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
-  fieldNames?: FieldNamesProps; // 指定 label && value && children 的 key 值
-  headerRender?: (scope: HeaderRenderScope<T>) => VNode; // 自定义表头内容渲染（tsx/h）
-  render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx/h）
-  _children?: ColumnProps<T>[]; // 多级表头 为了和ElTable的children属性做区分，否则会有问题
-}
-```
-
-### SearchProps
+## SearchProps
 
 搜索项配置
 
-| 属性名          | 描述                         | 类型                                     |
-|--------------|----------------------------|----------------------------------------|
-| el           | 要渲染的表单组件                   | `SearchType`                           |
-| props        | 传递给表单组件的属性，参考Element官网     | `any`                                  |
-| key          | 指定绑定值的名称，默认是Columns的`prop` | `srting`                               |
-| order        | 搜索项排序从大到小                  | `number`                               |
-| span         | 搜索项所占用的列数(grid布局)，默认1列     | `number`                               |
-| offset       | 搜索项左侧偏移列数                  | `number`                               |
-| defaultValue | 搜索项默认值                     | `any`                                  |
-| render       | 自定义搜索内容渲染（tsx/h）           | ` (scope: SearchRenderScope) => VNode` |
+| 属性名          | 描述                         | 类型                                    |
+|--------------|----------------------------|---------------------------------------|
+| el           | 要渲染的表单组件                   | [`SearchType`](#typescript)           |
+| props        | 传递给表单组件的属性，参考Element官网     | `any`                                 |
+| key          | 指定绑定值的名称，默认是Columns的`prop` | `srting`                              |
+| order        | 搜索项排序从大到小                  | `number`                              |
+| span         | 搜索项所占用的列数(grid布局)，默认1列     | `number`                              |
+| offset       | 搜索项左侧偏移列数                  | `number`                              |
+| defaultValue | 搜索项默认值                     | `any`                                 |
+| render       | 自定义搜索内容渲染（tsx/h）           | `(scope: SearchRenderScope) => VNode` |
 
-```typescript
+## Typescript
+
+:::details 点我查看TS类型代码
+
+```ts
 export type SearchProps = {
   el?: SearchType; // 渲染的输入组件
   props?: any; // 输入组件的属性，根据 element plus 官方文档来传递，该属性所有值会透传到搜索组件
@@ -194,11 +231,7 @@ export type SearchRenderScope = {
   options: EnumProps[];
   data: EnumProps[];
 };
-```
 
-#### EnumProps
-
-```ts
 export interface EnumProps {
   label?: string; // 选项框显示的文字
   value?: string | number | boolean | any[]; // 选项框值
@@ -207,4 +240,22 @@ export interface EnumProps {
   children?: EnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
   [key: string]: any; // 其他属性
 }
+
+export interface ColumnProps<T = any>
+  extends Partial<
+    Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader" | "type">
+  > {
+  type?: "index" | "selection" | "expand" | "drag";
+  tag?: boolean; // 是否是标签展示
+  isShow?: boolean | Ref<boolean>; // 是否显示在表格当中
+  search?: SearchProps; // 搜索项配置
+  enum?: EnumProps[] | ((params?: any) => Promise<any>) | Ref<EnumProps[]>; // 枚举类型（字典）
+  isFilterEnum?: boolean; // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
+  fieldNames?: FieldNamesProps; // 指定 label && value && children 的 key 值
+  headerRender?: (scope: HeaderRenderScope<T>) => VNode; // 自定义表头内容渲染（tsx/h）
+  render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx/h）
+  _children?: ColumnProps<T>[]; // 多级表头 为了和ElTable的children属性做区分，否则会有问题
+}
 ```
+
+:::

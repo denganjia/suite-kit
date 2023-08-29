@@ -45,6 +45,10 @@ export const config: UserConfig = {
           collapsible: true,
           items: [{ text: "ProTable", link: "/components/Element/ProTable" }],
         },
+        {
+          text: "Grid",
+          link: "/components/Grid",
+        },
       ],
     },
   },
