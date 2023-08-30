@@ -28,11 +28,9 @@ const columns: ColumnProps[] = [
     label: "年龄",
     prop: "age",
     headerRender(scope) {
-      console.log(scope);
       return "表头渲染函数";
     },
     render(scope) {
-      console.log(scope);
       return "表格渲染函数";
     },
   },

@@ -1,27 +1,22 @@
 <template>
 	<div class="table">
-		<ProTable :columns="columns" :data="data"></ProTable>
+		<ProTable :columns="columns" :request-api="getDataApi" @drag-sort="onDrag"></ProTable>
 	</div>
 </template>
 
 <script setup lang="ts">
 import ProTable from "@suite-kit/el-protable";
 import { ColumnProps } from "@suite-kit/el-protable";
+import { getDataApi } from "../../../fetch";
 import { dayjs } from "element-plus";
 
-const data = Array(20)
-	.fill(undefined)
-	.map((_, index) => {
-		return {
-			name: `张三` + index,
-			age: index + 1,
-			gender: index % 2,
-			createTime: dayjs(),
-		};
-	});
+const onDrag = (newIndex?: number, oldIndex?: number, data?: any) => {
+	console.log(newIndex, oldIndex, data);
+};
 
 const columns: ColumnProps[] = [
-	{ label: "姓名", prop: "name" },
+	{ type: "drag" },
+	{ label: "姓名", prop: "name", search: { el: "text" } },
 	{ label: "年龄", prop: "age" },
 	{
 		label: "性别",
@@ -30,6 +25,7 @@ const columns: ColumnProps[] = [
 			{ label: "男", value: 1 },
 			{ label: "女", value: 0 },
 		],
+		search: { el: "select" },
 	},
 	{
 		label: "创建时间",
@@ -37,6 +33,7 @@ const columns: ColumnProps[] = [
 		render({ row }) {
 			return dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss");
 		},
+		search: { el: "date-picker" },
 	},
 ];
 </script>
