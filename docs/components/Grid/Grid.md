@@ -22,9 +22,26 @@ Grid/Grid/gap
 
 ## 偏移
 
+设置`offset`来控制GridItem的偏移量，也可以设置**响应式**的`offset`
+
+:::demo
+Grid/Grid/offset
+:::
+
 ## 响应式列数
 
+Grid组件默认生成的响应式列数是**4**列，可传入`cols`手动设置，除了传入一个固定的数字外，也可传入响应式配置
+
+:::demo
+Grid/Grid/responsive
+:::
+
 ## 折叠
+
+设置`collapsed`来控制折叠状态，设置`collapsedRows`控制折叠后的行数
+:::demo
+Grid/Grid/collapsed
+:::
 
 ## Grid属性
 

@@ -17,7 +17,7 @@
 				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
 			</GridItem>
 		</Grid>
-		<ElDivider></ElDivider>
+		<hr>
 		<el-space size="large">
 			<div style="width: 200px">
 				<el-form-item label="间距">
@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { Grid, GridItem } from "@suite-kit/grid";
-import { ElSlider, ElFormItem, ElSpace, ElDivider } from "element-plus";
+import { ElSlider, ElFormItem, ElSpace } from "element-plus";
 import { reactive } from "vue";
 
 const gap = reactive({

@@ -4,7 +4,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { computed, inject, Ref, ref, useAttrs, watch } from "vue";
+import { computed, inject, Ref, ref, useAttrs, watch, getCurrentInstance } from "vue";
 import { BreakPoint, Responsive } from "./type";
 defineOptions({
 	name: "GridItem",
@@ -18,6 +18,7 @@ type Props = {
 	md?: Responsive;
 	lg?: Responsive;
 	xl?: Responsive;
+	_index?: number;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,19 +30,23 @@ const props = withDefaults(defineProps<Props>(), {
 	md: undefined,
 	lg: undefined,
 	xl: undefined,
+	_index: undefined,
 });
 
 const attrs = useAttrs() as { index: string };
 const isShow = ref(true);
-
+const ctx = getCurrentInstance();
 // 注入断点
 const breakPoint = inject<Ref<BreakPoint>>("breakPoint", ref("xl"));
 const shouldHiddenIndex = inject<Ref<number>>("shouldHiddenIndex", ref(-1));
 watch(
 	() => [shouldHiddenIndex.value, breakPoint.value],
 	n => {
-		if (!!attrs.index) {
-			isShow.value = !(n[0] !== -1 && parseInt(attrs.index) >= Number(n[0]));
+		console.log(ctx);
+		//@ts-ignore
+		if (!!attrs.index || props._index) {
+			//@ts-ignore
+			isShow.value = !(n[0] !== -1 && parseInt(attrs.index || props._index) >= Number(n[0]));
 		}
 	},
 	{ immediate: true },

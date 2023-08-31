@@ -8,12 +8,12 @@ import MyLayout from "./components/Layout.vue";
 import { globals } from "../vitepress";
 
 export default {
-  extends: DefaultTheme,
-  enhanceApp(ctx: EnhanceAppContext) {
-    globals.forEach(([name, Comp]) => {
-      ctx.app.component(name, Comp);
-    });
-  },
-  Layout: MyLayout,
-  // extends: DefaultTheme,
+	extends: DefaultTheme,
+	enhanceApp(ctx: EnhanceAppContext) {
+		globals.forEach(([name, Comp]) => {
+			ctx.app.component(name, Comp);
+		});
+	},
+	Layout: MyLayout,
+	// extends: DefaultTheme,
 };
