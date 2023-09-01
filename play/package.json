@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.4",
+    "@suite-kit/el-protable": "*",
     "element-plus": "^2.3.8",
-    "@suite-kit/el-protable": "*"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

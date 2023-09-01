@@ -8,10 +8,11 @@
 		".": "./src/index.ts"
 	},
 	"devDependencies": {
-		"vue": "^3.3.4",
+		"@vitejs/plugin-vue": "^4.2.3",
 		"vite": "^4.4.3",
 		"vite-plugin-dts": "^3.3.1",
-		"@vitejs/plugin-vue": "^4.2.3"
+		"vue": "^3.3.4",
+		"@vitejs/plugin-vue-jsx": "^3.0.2"
 	},
 	"scripts": {
 		"build": "vite build"
