@@ -2,14 +2,14 @@
 	<el-button type="primary" @click="click">{{ collapsed ? "展开" : "折叠" }}</el-button>
 	<p></p>
 	<GridTsx :gap="[20, 20]" :cols="24" :collapsed="collapsed" :collapsed-rows="1">
-		<template v-for="item in 10" :key="item">
-			<GridItemTsx :span="item % 2 == 0 ? 8 : 4">
-				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
-			</GridItemTsx>
-		</template>
 		<GridItemTsx :span="2" :suffix="true">
 			<div class="box"></div>
 		</GridItemTsx>
+		<template v-for="item in 10" :key="item">
+			<GridItemTsx :span="item % 2 == 0 ? 8 : 4" v-show="true">
+				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
+			</GridItemTsx>
+		</template>
 	</GridTsx>
 </template>
 

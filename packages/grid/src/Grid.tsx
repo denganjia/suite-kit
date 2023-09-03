@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, computed, ref, cloneVNode, vShow } from "vue";
+import { defineComponent, getCurrentInstance, computed, ref, cloneVNode, vShow, Fragment } from "vue";
 import type { PropType, VNode } from "vue";
 import { flatten } from "../utils/flatten";
 import { getSlot } from "../utils/get-slot";
@@ -49,7 +49,9 @@ export default defineComponent({
 			}> = [];
 			const { collapsed, collapsedRows, cols } = this;
 
-			// let suffixNode: VNode | null = null;
+			const showHideIndex = collapsed ? 3 : -1;
+
+			let suffixNode: VNode | null = null;
 			rawChildren.forEach(child => {
 				if ((child?.type as any)?.__GRID_ITEM__ !== true) return;
 
@@ -64,6 +66,10 @@ export default defineComponent({
 						child: clonedNode,
 						rawChildSpan: 0,
 					});
+					return;
+				}
+				if (child.props?.suffix === true) {
+					suffixNode = cloneVNode(child);
 					return;
 				}
 				// We don't want v-show to control display, so we need to stripe it
@@ -84,7 +90,17 @@ export default defineComponent({
 				});
 			});
 
-			return <div style={this.style}>{childrenAndRawSpan.map(({ child }) => child)}</div>;
+			return (
+				<div style={this.style}>
+					{childrenAndRawSpan.map(({ child }, idx) => {
+						if (showHideIndex >= 0 && idx >= showHideIndex) {
+							child.props = { ...child.props, privateShow: false };
+						}
+						return child;
+					})}
+					<>{suffixNode}</>
+				</div>
+			);
 		};
 		// return <div style={this.style}>{this.$slots.default!()}</div>;
 		return renderContent();
