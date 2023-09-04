@@ -111,10 +111,7 @@ const findIndex = () => {
 		// slot children
 		if (typeof slot.type === "symbol" && Array.isArray(slot.children)) fields.push(...slot.children);
 	});
-	fields.forEach((field: any, index: number) => {
-		field.props.privateShow = index % 2 == 0;
-	});
-	console.log(fields);
+
 
 	// 计算 suffix 所占用的列
 	let suffixCols = 0;

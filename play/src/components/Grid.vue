@@ -1,13 +1,15 @@
 <template>
 	<el-button type="primary" @click="click">{{ collapsed ? "展开" : "折叠" }}</el-button>
 	<p></p>
-	<GridTsx :gap="[20, 20]" :cols="24" :collapsed="collapsed" :collapsed-rows="1">
-		<GridItemTsx :span="2" :suffix="true">
+	<GridTsx :gap="[20, 20]" :cols="{ xl: 24, lg: 24, md: 12, sm: 8, xs: 4 }" :collapsed="collapsed" :collapsed-rows="2">
+		<GridItemTsx :span="4" :suffix="true">
 			<div class="box"></div>
 		</GridItemTsx>
 		<template v-for="item in 10" :key="item">
-			<GridItemTsx :span="item % 2 == 0 ? 8 : 4" v-show="true">
-				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
+			<GridItemTsx :span="{ xl: 4, lg: 4, md: 3, sm: 2, xs: 1 }">
+				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'">
+					{{ item }}
+				</div>
 			</GridItemTsx>
 		</template>
 	</GridTsx>
@@ -30,6 +32,8 @@ const click = () => {
 	width: 100%;
 	height: 32px;
 	background-color: var(--el-color-success);
+	line-height: 32px;
+	text-align: center;
 }
 .light-3 {
 	background-color: var(--el-color-primary-light-3);
