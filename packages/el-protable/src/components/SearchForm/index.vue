@@ -54,13 +54,8 @@ const collapsedRows = inject("collapsedRows", ref(1));
 // 获取响应式设置
 const getResponsive = (item: ColumnProps) => {
 	return {
-		span: item.search?.span,
+		span: item.search?.span ?? 1,
 		offset: item.search?.offset ?? 0,
-		xs: item.search?.xs,
-		sm: item.search?.sm,
-		md: item.search?.md,
-		lg: item.search?.lg,
-		xl: item.search?.xl,
 	};
 };
 
@@ -75,9 +70,10 @@ const breakPoint = computed<BreakPoint>(() => gridRef.value?.breakPoint);
 const showCollapse = computed(() => {
 	let show = false;
 	props.columns.reduce((prev, current) => {
+		let { span = 1, offset = 0 } = current.search ?? { span: 1, offset: 0 };
 		prev +=
-			(current.search![breakPoint.value]?.span ?? current.search?.span ?? 1) +
-			(current.search![breakPoint.value]?.offset ?? current.search?.offset ?? 0);
+			(typeof span == "object" ? span[breakPoint.value] ?? 1 : span) +
+			(typeof offset === "object" ? offset[breakPoint.value] ?? 0 : offset);
 		if (typeof props.searchCol !== "number") {
 			if (prev >= props.searchCol[breakPoint.value] * collapsedRows.value) show = true;
 		} else {

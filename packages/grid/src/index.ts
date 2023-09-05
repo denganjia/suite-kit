@@ -1,6 +1,4 @@
-import Grid from "./Grid.vue";
-import GridItem from "./GridItem.vue";
-import { default as GridItemTsx } from "./GridItem";
-import { default as GridTsx } from "./Grid";
-export { Grid, GridItem, GridItemTsx, GridTsx };
+import { default as GridItem } from "./GridItem";
+import { default as Grid } from "./Grid";
+export { Grid, GridItem };
 export * from "./type.d";

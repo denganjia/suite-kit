@@ -4,15 +4,18 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "dev:play":"turbo run dev --filter=play",
-    "dev:docs":"turbo run dev --filter=docs",
+    "dev:play": "turbo run dev --filter=play",
+    "dev:docs": "turbo run dev --filter=docs",
+    "build:docs": "turbo run build --filter=docs",
+    "build:grid": "turbo run build --filter=@suite-kit/grid",
+    "build:el-protable":"turbo run build --filter=@suite-kit/el-protable",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
     "eslint": "^7.32.0",
     "prettier": "^2.5.1",
-    "turbo": "latest"
+    "turbo": "^1.10.7"
   },
   "name": "my-turborepo",
   "packageManager": "yarn@1.22.18",

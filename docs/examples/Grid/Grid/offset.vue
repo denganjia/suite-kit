@@ -1,22 +1,13 @@
 <template>
 	<Grid :gap="[20, 20]" :cols="24">
-		<GridItem v-for="item in 10" :key="item" :span="6" :offset="item % 2 == 0 ? 0 : 2">
-			<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
+		<GridItem v-for="item in 8" :key="item" :span="item % 2 === 0 ? 5 : 4" :offset="item % 2 == 0 ? 1 : 2">
+			<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"> {{ item }}</div>
 		</GridItem>
 	</Grid>
 	<hr />
 	<Grid :gap="[20, 20]" :cols="24">
-		<GridItem
-			v-for="item in 6"
-			:key="item"
-			:span="6"
-			:xs="{ offset: 0 }"
-			:sm="{ offset: 1 }"
-			:md="{ offset: 2 }"
-			:lg="{ offset: 3 }"
-			:xl="{ offset: 4 }"
-		>
-			<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
+		<GridItem v-for="item in 6" :key="item" :span="6" :offset="item === 2 ? 2 : 0">
+			<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"> {{ item }}</div>
 		</GridItem>
 	</Grid>
 </template>
@@ -29,6 +20,8 @@ import { Grid, GridItem } from "@suite-kit/grid";
 .box {
 	width: 100%;
 	height: 32px;
+	line-height: 32px;
+	text-align: center;
 }
 .light-3 {
 	background-color: var(--el-color-primary-light-3);

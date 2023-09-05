@@ -18,9 +18,10 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { cols, gap } = inject("responsive", {
+		const { cols, gap, overflow } = inject("responsive", {
 			cols: ref(4),
 			gap: 0,
+			overflow: ref(false),
 		});
 		return {
 			driveStyle(breakPoint: string) {
@@ -43,6 +44,7 @@ export default defineComponent({
 					};
 				}
 			},
+			overflow: overflow,
 		};
 	},
 	render() {
@@ -53,7 +55,7 @@ export default defineComponent({
 					display: this.$attrs.privateShow === false ? "none" : "",
 					...this.driveStyle(this.$attrs.breakPoint as BreakPoint),
 				}}>
-				{this.$slots.default?.()}
+				{this.$slots.default?.({ overflow: this.overflow })}
 			</div>
 		);
 	},

@@ -3,31 +3,31 @@
 		<el-space size="large">
 			<div style="width: 200px">
 				<el-form-item label="横向间距">
-					<el-slider :max="100" :min="0" v-model="gap.x"></el-slider>
+					<el-input-number :max="100" :min="0" v-model="gap.x"></el-input-number>
 				</el-form-item>
 			</div>
 			<div style="width: 200px">
 				<el-form-item label="纵向间距">
-					<el-slider :max="100" :min="0" v-model="gap.y"></el-slider>
+					<el-input-number :max="100" :min="0" v-model="gap.y"></el-input-number>
 				</el-form-item>
 			</div>
 		</el-space>
 		<Grid :gap="[gap.x, gap.y]">
-			<GridItem v-for="item in 8" :key="item">
-				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
+			<GridItem v-for="item in 8" :key="item" :span="6">
+				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"> {{ item }}</div>
 			</GridItem>
 		</Grid>
-		<hr>
+		<hr />
 		<el-space size="large">
 			<div style="width: 200px">
 				<el-form-item label="间距">
-					<el-slider :max="100" :min="0" v-model="gap.total"></el-slider>
+					<el-input-number :max="100" :min="0" v-model="gap.total"></el-input-number>
 				</el-form-item>
 			</div>
 		</el-space>
 		<Grid :gap="gap.total">
-			<GridItem v-for="item in 10" :key="item">
-				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"></div>
+			<GridItem v-for="item in 8" :key="item" :span="6">
+				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'"> {{ item }}</div>
 			</GridItem>
 		</Grid>
 	</div>
@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { Grid, GridItem } from "@suite-kit/grid";
-import { ElSlider, ElFormItem, ElSpace } from "element-plus";
+import { ElFormItem, ElSpace, ElInputNumber } from "element-plus";
 import { reactive } from "vue";
 
 const gap = reactive({
@@ -49,6 +49,8 @@ const gap = reactive({
 .box {
 	width: 100%;
 	height: 32px;
+	line-height: 32px;
+	text-align: center;
 }
 .light-3 {
 	background-color: var(--el-color-primary-light-3);

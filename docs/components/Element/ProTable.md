@@ -45,7 +45,7 @@ Element/ProTable/renderForm
 
 ## 响应式搜索表单
 
-搜索表单使用`@suite-kit/Grid`构建，支持响应式。
+搜索表单使用[`@suite-kit/Grid`](/components/Grid/Grid)构建，支持响应式。
 
 默认响应式配置是`{ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }`，一个搜索项占一列，可以根据需要自行配置，同时可设置`order`
 来改变搜索项展示的顺序，默认是按照 columns 的顺序展示
@@ -211,8 +211,8 @@ Element/ProTable/drag
 | props        | 传递给表单组件的属性，参考 Element 官网   | `any`                                 |
 | key          | 指定绑定值的名称，默认是 Columns 的`prop` | `srting`                              |
 | order        | 搜索项排序从大到小                        | `number`                              |
-| span         | 搜索项所占用的列数(grid 布局)，默认 1 列  | `number`                              |
-| offset       | 搜索项左侧偏移列数                        | `number`                              |
+| span         | 搜索项所占用的列数(grid 布局)，默认 **1** 列  | `number \| { xs: number, sm: number, md: number, lg: number, xl: number }`                              |
+| offset       | 搜索项左侧偏移列数                        | `number \| { xs: number, sm: number, md: number, lg: number, xl: number }`                              |
 | defaultValue | 搜索项默认值                              | `any`                                 |
 | render       | 自定义搜索内容渲染（tsx/h）               | `(scope: SearchRenderScope) => VNode` |
 
@@ -221,23 +221,19 @@ Element/ProTable/drag
 :::details 点我查看 TS 类型代码
 
 ```ts
+
+export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
+
 export type SearchProps = {
  el?: SearchType; // 渲染的输入组件
  props?: any; // 输入组件的属性，根据 element plus 官方文档来传递，该属性所有值会透传到搜索组件
  key?: string; // 当搜索项 key 不为 prop 属性时，可通过 key 指定
  order?: number; // 搜索项排序（从大到小）
- span?: number; // 搜索项所占用的列数，默认为1列
- offset?: number; // 搜索字段左侧偏移列数
+ span?: number | Record<BreakPoint, number>; // 搜索项所占用的列数，默认为1列
+ offset?: number | Record<BreakPoint, number>; // 搜索字段左侧偏移列数
  defaultValue?: any; // 搜索项默认值
  render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx/h）
-} & Partial<Record<BreakPoint, Responsive>>;
-
-export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
-
-export type Responsive = {
- span?: number;
- offset?: number;
-};
+}
 export type SearchType =
  | "text" // 文本框
  | "number" // 数字输入框

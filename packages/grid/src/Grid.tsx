@@ -1,53 +1,83 @@
-import { defineComponent, computed, cloneVNode, vShow, provide } from "vue";
-import { useBreakpoints } from "@vueuse/core";
-import type { ComputedRef, PropType, VNode } from "vue";
+import {
+	defineComponent,
+	computed,
+	cloneVNode,
+	vShow,
+	provide,
+	ref,
+	onMounted,
+	onActivated,
+	onDeactivated,
+	onUnmounted,
+} from "vue";
+import type { PropType, VNode } from "vue";
 import { flatten } from "../utils/flatten";
 import { getSlot } from "../utils/get-slot";
 import { getResponsive } from "../utils/get-responsive";
 import { BreakPoint } from "./type";
 import { isNodeVShowFalse } from "../utils/is-node-v-show-false";
-import { onMounted } from "vue";
 export default defineComponent({
 	name: "SuiteKitGrid",
 	props: {
-		gap: { type: [Array, Number] as PropType<[number, number] | number>, default: [0, 0] },
-		cols: { type: [Object, Number] as PropType<Record<BreakPoint, number> | number>, default: 4 },
+		gap: { type: [Array, Number] as PropType<[number, number] | number>, default: 0 },
+		cols: { type: [Object, Number] as PropType<Record<BreakPoint, number> | number>, default: 24 },
 		collapsed: { type: Boolean, default: false },
 		collapsedRows: { type: Number, default: 1 },
-		responsive: { type: String as PropType<"self" | "screen">, default: "screen" },
+		// responsive: { type: String as PropType<"self" | "screen">, default: "screen" },
 	},
 	setup(props, { expose }) {
-		const { gap, cols } = props;
-
-		onMounted(() => {});
-		// 注入响应式断点
-		const breakPoints = useBreakpoints({
-			sm: 768,
-			md: 992,
-			lg: 1200,
-			xl: 1600,
+		const breakPoint = ref<BreakPoint>("xl");
+		// 监听屏幕变化
+		const resize = (e: UIEvent) => {
+			let width = (e.target as Window).innerWidth;
+			switch (!!width) {
+				case width < 768:
+					breakPoint.value = "xs";
+					break;
+				case width >= 768 && width < 992:
+					breakPoint.value = "sm";
+					break;
+				case width >= 992 && width < 1200:
+					breakPoint.value = "md";
+					break;
+				case width >= 1200 && width < 1920:
+					breakPoint.value = "lg";
+					break;
+				case width >= 1920:
+					breakPoint.value = "xl";
+					break;
+			}
+		};
+		onMounted(() => {
+			resize({ target: { innerWidth: window.innerWidth } } as unknown as UIEvent);
+			window.addEventListener("resize", resize);
+		});
+		onActivated(() => {
+			resize({ target: { innerWidth: window.innerWidth } } as unknown as UIEvent);
+			window.addEventListener("resize", resize);
+		});
+		onUnmounted(() => {
+			window.removeEventListener("resize", resize);
+		});
+		onDeactivated(() => {
+			window.removeEventListener("resize", resize);
 		});
 		// 设置间距
 		const gridGap = computed(() => {
-			if (typeof gap === "number") return `${gap}px`;
-			if (Array.isArray(gap)) return `${gap[1]}px ${gap[0]}px`;
+			if (typeof props.gap === "number") return `${props.gap}px`;
+			if (Array.isArray(props.gap)) return `${props.gap[1]}px ${props.gap[0]}px`;
 			return "unset";
 		});
-		//获取当前断点
-		const breakPoint: ComputedRef<BreakPoint> = computed<any>(() => {
-			//@ts-ignore
-			let currents = breakPoints.current().value;
-			if (currents.length > 0) return currents[currents.length - 1];
-			if (breakPoints.isSmaller("sm")) return "xs";
-			if (breakPoints.isGreater("xl")) return "xl";
-			return "lg";
-		});
+
 		const gridCols = computed(() => {
-			return typeof cols === "object" ? cols[breakPoint.value] ?? cols : cols;
+			return typeof props.cols === "object" ? props.cols[breakPoint.value] ?? 24 : props.cols;
 		});
+		// 是否有溢出
+		const overflow = ref(false);
 		provide("responsive", {
 			cols: gridCols,
-			gap: Array.isArray(gap) ? gap[0] : gap,
+			gap: Array.isArray(props.gap) ? props.gap[0] : props.gap,
+			overflow,
 		});
 		expose({ breakPoint });
 		return {
@@ -60,10 +90,12 @@ export default defineComponent({
 			}),
 			breakPoint: breakPoint,
 			cols: gridCols,
+			overflow: overflow,
 		};
 	},
 	render() {
 		const renderContent = () => {
+			this.overflow = false;
 			// render will be called twice when mounted, I can't figure out why
 			// 2 jobs will be pushed into job queues with same id, and then be flushed
 			const rawChildren = flatten(getSlot(this));
@@ -83,7 +115,6 @@ export default defineComponent({
 			let suffixNode: VNode | null = null;
 			rawChildren.forEach(child => {
 				if ((child?.type as any)?.__GRID_ITEM__ !== true) return;
-
 				if (isNodeVShowFalse(child)) {
 					const clonedNode = cloneVNode(child);
 					clonedNode.props = { ...(clonedNode.props || {}), privateShow: false };
@@ -93,7 +124,7 @@ export default defineComponent({
 					});
 					return;
 				}
-				if (child.props?.suffix === true) {
+				if (child.props?.suffix == "" || child.props?.suffix === true) {
 					suffixNode = cloneVNode(child);
 					return;
 				}
@@ -111,6 +142,7 @@ export default defineComponent({
 				childSpanCache += span + offset;
 				let { span: suffixSpan, offset: suffixOffset } = getResponsive(suffixNode?.props, breakPoint);
 				if (collapsed && childSpanCache > collapsedSpanFlag.value - suffixSpan - suffixOffset) {
+					this.overflow = true;
 					clonedChild.props = { ...(clonedChild.props || {}), privateShow: false };
 				}
 				if (span === 0) return;
