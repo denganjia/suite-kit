@@ -1,5 +1,3 @@
-<!-- 📚📚📚 Pro-Table 文档: https://juejin.cn/post/7166068828202336263 -->
-
 <template>
 	<div>
 		<div :style="isShowSearch ? { marginBottom: '18px' } : ''">

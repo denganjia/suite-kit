@@ -1,6 +1,5 @@
 {
 	"name": "@suite-kit/grid",
-	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"module": "./dist/index.js",
@@ -23,5 +22,8 @@
 	},
 	"scripts": {
 		"build": "vite build"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

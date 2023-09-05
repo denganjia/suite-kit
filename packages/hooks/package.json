@@ -1,9 +1,9 @@
 {
-  "name": "@suite-kit/hooks",
-  "private": true,
-  "version": "0.0.0",
-  "main": "./index.ts",
-  "devDependencies": {
-    "vue": "^3.3.4"
-  }
+	"name": "@suite-kit/hooks",
+	"type": "module",
+	"version": "0.0.0",
+	"main": "./index",
+	"devDependencies": {
+		"vue": "^3.3.4"
+	}
 }

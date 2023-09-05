@@ -1,7 +1,7 @@
 {
-  "name": "@suite-kit/utils",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./index.ts",
-  "dependencies": {}
+	"name": "@suite-kit/utils",
+	"version": "0.0.0",
+	"type": "module",
+	"main": "./index.ts",
+	"dependencies": {}
 }
