@@ -16,12 +16,11 @@ export default defineComponent({
 		collapsedRows: { type: Number, default: 1 },
 		responsive: { type: String as PropType<"self" | "screen">, default: "screen" },
 	},
-	setup(props) {
+	setup(props, { expose }) {
 		const { gap, cols } = props;
 
 		onMounted(() => {});
 		// 注入响应式断点
-		// let breakPoint = ref<BreakPoint>("xl");
 		const breakPoints = useBreakpoints({
 			sm: 768,
 			md: 992,
@@ -50,6 +49,7 @@ export default defineComponent({
 			cols: gridCols,
 			gap: Array.isArray(gap) ? gap[0] : gap,
 		});
+		expose({ breakPoint });
 		return {
 			style: computed(() => {
 				return {
