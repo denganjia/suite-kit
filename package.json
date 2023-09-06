@@ -11,9 +11,8 @@
     "build:grid": "turbo run build --filter=suite-kit/grid",
     "build:el-protable": "turbo run build --filter=suite-kit/el-protable",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "publish-packages": "turbo run build lint && changeset version && changeset publish",
+    "publish-packages": "turbo run lint build && changeset version && changeset publish",
     "release": "standard-version",
-    "docs:build": "vitepress build docs",
     "cz":" git add . && czg"
   },
   "devDependencies": {

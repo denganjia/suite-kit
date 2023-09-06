@@ -8,6 +8,8 @@
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "^2.1.0",
+		"@suite-kit/el-protable": "*",
+		"@suite-kit/grid": "*",
 		"@turbo/gen": "^1.9.7",
 		"consola": "^3.2.3",
 		"element-plus": "^2.3.9",
