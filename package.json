@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -13,7 +13,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "publish-packages": "turbo run lint build && changeset version && changeset publish",
     "release": "standard-version",
-    "cz":" git add . && czg"
+    "cz": " git add . && czg"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
