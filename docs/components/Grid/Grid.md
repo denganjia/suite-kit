@@ -13,9 +13,9 @@
 ## 安装
 
 ```sh
-yarn add @suite-kit/el-protable
+yarn add @suite-kit/grid
 # or
-npm i @suite-kit/el-protable
+npm i @suite-kit/grid
 ```
 
 ## 基础用法
