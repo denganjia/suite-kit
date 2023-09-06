@@ -5,6 +5,14 @@
 
 将搜索表单、表格主体、分页组件封装在一起的超级表格，最少只需要传递一个函数和一个列配置即可生成带搜索表单、表格主体、分页的组件
 
+## 安装
+
+```sh
+yarn add @suite-kit/el-protable
+# or
+npm i @suite-kit/el-protable
+```
+
 ## 基础用法
 
 如果没有什么特殊要求，给组件传递一个请求函数`request-api`和`columns`就能生成一个基础表格

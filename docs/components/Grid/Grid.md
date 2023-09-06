@@ -10,6 +10,14 @@
 `Grid`组件内部使用的断点是参照[`El-Layout`](https://element-plus.org/zh-CN/component/layout.html#col-attributes)设计的
 :::
 
+## 安装
+
+```sh
+yarn add @suite-kit/el-protable
+# or
+npm i @suite-kit/el-protable
+```
+
 ## 基础用法
 
 ::: demo
