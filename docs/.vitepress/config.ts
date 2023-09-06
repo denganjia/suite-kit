@@ -8,12 +8,16 @@ export const config: UserConfig = {
 	// site-level options
 	title: "Suite Kit",
 	description: "Some high-level components of commonly used component libraries",
-
+	head: [
+		["meta", { name: "author", content: "denganjia" }],
+		["link", { rel: "icon", href: "/home.png" }],
+	],
+	lastUpdated: true,
 	themeConfig: {
 		// theme-level options
 		footer: {
 			message: "MIT License.",
-			copyright: "Copyright © 2023 Suite Kit",
+			copyright: "Copyright © 2023 Suite-Kit",
 		},
 		nav: [
 			{ text: "指南", link: "/guide/", activeMatch: "/guide" },
@@ -22,6 +26,7 @@ export const config: UserConfig = {
 				link: "/components/Element/ProTable",
 				activeMatch: "/components",
 			},
+			{ text: "赞助", link: "/sponsor/index" },
 		],
 		sidebar: {
 			"/guide/": [
@@ -32,10 +37,6 @@ export const config: UserConfig = {
 						{ text: "介绍", link: "/guide/introduce" },
 						{ text: "开始", link: "/guide/" },
 					],
-				},
-				{
-					text: "进阶",
-					collapsible: true,
 				},
 			],
 			"/components/": [
@@ -50,6 +51,7 @@ export const config: UserConfig = {
 				},
 			],
 		},
+		socialLinks: [{ icon: "github", link: "https://github.com/denganjia/suite-kit" }],
 	},
 	vite: {
 		// @ts-ignore
@@ -62,6 +64,9 @@ export const config: UserConfig = {
 			vueJsx(),
 			MarkdownTransform(),
 		],
+		ssr:{
+			noExternal:["vue"]
+		}
 	},
 	markdown: {
 		config: md => mdPlugin(md),

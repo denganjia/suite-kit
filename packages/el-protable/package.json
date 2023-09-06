@@ -2,7 +2,7 @@
   "name": "@suite-kit/el-protable",
   "version": "0.0.0",
   "type": "module",
-  "repository": "git@github.com:denganjia/suite-kit.git",
+  "repository": "https://github.com/denganjia/suite-kit.git",
   "files": [
     "dist"
   ],

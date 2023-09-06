@@ -12,12 +12,12 @@ hero:
     - theme: brand
       text: 快速上手
       link: /guide/index
-    - theme: alt
-      text: 在线预览
+    # - theme: alt
+      # text: 在线预览
       # link: https://admin.spicyboy.cn
     - theme: alt
       text: 在 Github 上查看
-      # link: https://github.com/HalseySpicy/Geeker-Admin
+      link: https://github.com/denganjia/suite-kit
   image:
     src: /astronaut.png
 features:

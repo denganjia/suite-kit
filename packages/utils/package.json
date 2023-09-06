@@ -3,5 +3,6 @@
 	"version": "0.0.0",
 	"type": "module",
 	"main": "./index.ts",
+	"repository": "https://github.com/denganjia/suite-kit.git",
 	"dependencies": {}
 }

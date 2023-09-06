@@ -3,6 +3,7 @@
 	"type": "module",
 	"version": "0.0.0",
 	"main": "./index",
+	"repository": "https://github.com/denganjia/suite-kit.git",
 	"devDependencies": {
 		"vue": "^3.3.4"
 	}

@@ -4,6 +4,7 @@
 	"type": "module",
 	"module": "./dist/index.js",
 	"main": "./src/index.ts",
+	"repository": "https://github.com/denganjia/suite-kit.git",
 	"exports": {
 		".": {
 			"import": "./dist/index.js",

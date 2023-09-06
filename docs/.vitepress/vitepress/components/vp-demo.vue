@@ -66,7 +66,7 @@ const copyCode = async () => {
 </script>
 
 <template>
-  <ClientOnly>
+  <!-- <ClientOnly> -->
     <!-- danger here DO NOT USE INLINE SCRIPT TAG -->
     <p text="sm" v-html="decodedDescription" />
     <div class="example">
@@ -131,7 +131,7 @@ const copyCode = async () => {
         </div>
       </Transition>
     </div>
-  </ClientOnly>
+  <!-- </ClientOnly> -->
 </template>
 
 <style scoped lang="scss">
