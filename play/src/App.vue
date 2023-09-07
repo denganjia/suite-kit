@@ -17,7 +17,7 @@ import { ElTabs, ElTabPane, ElConfigProvider } from "element-plus";
 import { ref } from "vue";
 // @ts-ignore
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
-const active = ref("Grid");
+const active = ref("ElProTable");
 </script>
 
 <style scoped></style>

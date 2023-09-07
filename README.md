@@ -8,4 +8,5 @@
 
 ## 交流群
 
-![微信](./docs//assets//weixin.jpg)
+<!-- ![微信](./docs//assets//weixin.jpg) -->
+<img src="./docs//assets//weixin.jpg" width="300">

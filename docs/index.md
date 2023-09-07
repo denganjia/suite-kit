@@ -10,8 +10,8 @@ hero:
   tagline: 采用Vue3加常用的UI组件库实现，旨在迎合大众
   actions:
     - theme: brand
-      text: 快速上手
-      link: /guide/index
+      text: 立即开始
+      link: /components/Element/ProTable
     # - theme: alt
       # text: 在线预览
       # link: https://admin.spicyboy.cn

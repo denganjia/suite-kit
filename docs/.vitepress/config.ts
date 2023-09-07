@@ -35,7 +35,6 @@ export const config: UserConfig = {
 					collapsible: true,
 					items: [
 						{ text: "介绍", link: "/guide/introduce" },
-						{ text: "开始", link: "/guide/" },
 					],
 				},
 			],

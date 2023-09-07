@@ -7,10 +7,22 @@
 
 ## 安装
 
+:::warning 警告
+`el-protable`是基于`element-plus`封装的，所以需要先安装`element-plus`
+默认你已安装了`element-plus`，并引入了ElementPlus的css文件，如果没有请先安装并引入
+:::
+
 ```sh
 yarn add @suite-kit/el-protable
 # or
 npm i @suite-kit/el-protable
+```
+
+引入样式文件
+
+``` ts
+// main.ts
+import "@suite-kit/el-protable/dist/style.css";
 ```
 
 ## 基础用法

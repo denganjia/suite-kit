@@ -1,6 +1,6 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns" title="用户信息表" :data-callback="dataCallback">
-		<template #tableHeader>
+	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback">
+		<template #title>
 			<el-button type="warning" @click="changeEnum">警告</el-button>
 		</template>
 	</ProTable>
@@ -38,22 +38,17 @@ const changeEnum = () => {
 		},
 	});
 };
-
 const enumGender = ref([
 	{ label: "男", value: 1 },
 	{ label: "女", value: 0 },
 ]);
 const columns = reactive<ColumnProps[]>([
 	{
-		type: "selection",
-	},
-	{
 		type: "drag",
 	},
 	{
 		label: "用户超级长用户超级长用户超级长用户超级长",
 		prop: "user",
-		tip: "222222",
 		_children: [
 			{
 				label: "姓名",
