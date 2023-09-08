@@ -280,8 +280,13 @@ const enumMap = ref(new Map<string, { [key: string]: any }[]>());
 provide("enumMap", enumMap);
 const setEnumMap = async (col: ColumnProps) => {
 	if (!col.enum) return;
+	// 如果当前enumMap存在相同的值就跳过
+	if (enumMap.value.has(col.prop!) && (typeof col.enum === "function" || enumMap.value.get(col.prop!) === col.enum))
+		return;
 	// 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-	if (typeof col.enum !== "function") return enumMap.value.set(col.prop!, unref(col.enum!));
+	if (typeof col.enum !== "function") {
+		return enumMap.value.set(col.prop!, unref(col.enum!));
+	}
 	const { data } = await col.enum();
 	enumMap.value.set(col.prop!, data);
 };
@@ -303,14 +308,14 @@ const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) =>
 };
 
 // flatColumns 扁平结构的columns
-const flatColumns = ref<ColumnProps[]>();
-watch(
-	tableColumns,
-	n => {
-		flatColumns.value = flatColumnsFunc(n);
-	},
-	{ immediate: true },
-);
+const flatColumns = computed(() => flatColumnsFunc(props.columns));
+// watch(
+// 	tableColumns,
+// 	n => {
+// 		flatColumns.value = flatColumnsFunc(n);
+// 	},
+// 	{ immediate: true },
+// );
 
 // 过滤需要搜索的配置项
 // const searchColumns = flatColumns.value.filter(item => item.search?.el || item.search?.render);
@@ -335,24 +340,12 @@ searchColumns.value.forEach((column, index) => {
 
 const colSettingRef = ref();
 // 列设置 ==> 过滤掉不需要设置的列
-const colSetting = tableColumns.map(item => {
-	if (!["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow) {
-		return { ...item, checked: true };
-	}
+const colSetting = tableColumns.filter(item => {
+	return !["selection", "index", "expand", "drag"].includes(item.type!) && item?.prop !== "operation" && item.isShow;
 });
 // 行拖拽
 // 表格主体
 onMounted(() => {
-	// setTimeout(() => {
-	// 	useSortable(document.body.getElementsByClassName("el-table__row")[0].parentElement, tableData, {
-	// 		onUpdate({ newIndex, oldIndex }) {
-	// 			console.log(newIndex, oldIndex);
-	// 			emits("drag-sort", newIndex, oldIndex, unref(tableData));
-	// 		},
-	// 		handle: ".el-protable-drag-handle",
-	// 		animation: 200,
-	// 	});
-	// }, 0);
 	dragSort();
 });
 // 拖拽排序

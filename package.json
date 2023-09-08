@@ -5,7 +5,7 @@
 		"build": "turbo run build",
 		"dev": "turbo run dev",
 		"lint": "turbo run lint",
-		"dev:play": "turbo run build --filter=./packages/* dev --filter=play",
+		"dev:play": "turbo run build --filter=./packages/* && turbo run dev --filter=play",
 		"dev:docs": "turbo run dev --filter=docs",
 		"build:docs": "turbo run build --filter=docs",
 		"build:grid": "turbo run build --filter=suite-kit/grid",

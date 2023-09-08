@@ -28,7 +28,7 @@ const changeEnum = () => {
 			{ label: "李四", value: 0 },
 		],
 	);
-	// columns[1].label = "四川";
+	columns[1].label = "四川";
 	// columns.push({
 	// 	label: "测试",
 	// 	prop: "test",
@@ -55,9 +55,9 @@ const getEnum = async () => {
 };
 
 const columns = reactive<ColumnProps[]>([
-	{
-		type: "drag",
-	},
+	// {
+	// 	type: "drag",
+	// },
 	{
 		label: "用户超级长用户超级长用户超级长用户超级长",
 		prop: "user",
