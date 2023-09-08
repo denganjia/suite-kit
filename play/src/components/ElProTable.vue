@@ -28,20 +28,32 @@ const changeEnum = () => {
 			{ label: "李四", value: 0 },
 		],
 	);
-	columns[1].label = "四川";
-	columns.push({
-		label: "测试",
-		prop: "test",
-		isShow: true,
-		search: {
-			el: "number",
-		},
-	});
+	// columns[1].label = "四川";
+	// columns.push({
+	// 	label: "测试",
+	// 	prop: "test",
+	// 	isShow: true,
+	// 	search: {
+	// 		el: "number",
+	// 	},
+	// });
 };
 const enumGender = ref([
 	{ label: "男", value: 1 },
 	{ label: "女", value: 0 },
 ]);
+
+const getEnum = async () => {
+	console.log("get enum");
+
+	return {
+		data: [
+			{ label: "男", value: 1 },
+			{ label: "女", value: 0 },
+		],
+	};
+};
+
 const columns = reactive<ColumnProps[]>([
 	{
 		type: "drag",
@@ -81,16 +93,13 @@ const columns = reactive<ColumnProps[]>([
 		label: "性别",
 		prop: "gender",
 		search: { el: "select", props: { clearable: false } },
-		enum: enumGender,
+		enum: enumGender.value,
 	},
 	{
 		label: "Cascader",
 		prop: "cascader",
 		search: { el: "cascader" },
-		enum: [
-			{ label: "男", value: 1 },
-			{ label: "女", value: 0 },
-		],
+		enum: getEnum,
 	},
 ]);
 </script>

@@ -1,43 +1,43 @@
 {
-  "version": "0.0.2",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "dev:play": "turbo run dev --filter=play",
-    "dev:docs": "turbo run dev --filter=docs",
-    "build:docs": "turbo run build --filter=docs",
-    "build:grid": "turbo run build --filter=suite-kit/grid",
-    "build:el-protable": "turbo run build --filter=suite-kit/el-protable",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "publish-packages": "turbo run lint build && changeset version && changeset publish",
-    "release": "standard-version",
-    "cz": " git add . && czg"
-  },
-  "devDependencies": {
-    "@turbo/gen": "^1.9.7",
-    "cz-git": "^1.7.1",
-    "czg": "^1.7.1",
-    "eslint": "^7.32.0",
-    "prettier": "^2.5.1",
-    "standard-version": "^9.5.0",
-    "turbo": "^1.10.7"
-  },
-  "packageManager": "yarn@1.22.18",
-  "workspaces": [
-    "docs",
-    "packages/*",
-    "play"
-  ],
-  "dependencies": {
-    "@changesets/cli": "^2.26.2",
-    "vite": "^4.4.1",
-    "vue": "^3.3.4"
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-git"
-    }
-  }
+	"version": "0.0.2",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"dev:play": "turbo run build --filter=./packages/* dev --filter=play",
+		"dev:docs": "turbo run dev --filter=docs",
+		"build:docs": "turbo run build --filter=docs",
+		"build:grid": "turbo run build --filter=suite-kit/grid",
+		"build:el-protable": "turbo run build --filter=suite-kit/el-protable",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"publish-packages": "turbo run lint build && changeset version && changeset publish",
+		"release": "standard-version",
+		"cz": " git add . && czg"
+	},
+	"devDependencies": {
+		"@turbo/gen": "^1.9.7",
+		"cz-git": "^1.7.1",
+		"czg": "^1.7.1",
+		"eslint": "^7.32.0",
+		"prettier": "^2.5.1",
+		"standard-version": "^9.5.0",
+		"turbo": "^1.10.7"
+	},
+	"packageManager": "yarn@1.22.18",
+	"workspaces": [
+		"docs",
+		"packages/*",
+		"play"
+	],
+	"dependencies": {
+		"@changesets/cli": "^2.26.2",
+		"vite": "^4.4.1",
+		"vue": "^3.3.4"
+	},
+	"config": {
+		"commitizen": {
+			"path": "node_modules/cz-git"
+		}
+	}
 }

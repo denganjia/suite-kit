@@ -4,7 +4,13 @@
 
 ## 开始
 
-请查看[文档](https://suite-kit/chiyu.site)
+请查看[文档](https://suite-kit.chiyu.site)
+
+## 运行示例项目
+
+```sh
+yarn dev:play
+```
 
 ## 交流群
 

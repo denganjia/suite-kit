@@ -118,6 +118,10 @@ Element/ProTable/defaultValue
 
 拖动排序，改变的**只是**dom结构，并**不会**改变表格数据，可以监听`drag-sort`事件
 
+:::info
+  在文档中drag不会生效
+:::
+
 ::: demo
 Element/ProTable/drag
 :::
