@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/denganjia/suite-kit/compare/v0.0.2...v0.0.3) (2023-09-08)
+
+
+### Bug Fixes
+
+* 修复BUG ([59b419f](https://github.com/denganjia/suite-kit/commit/59b419ff98752b460801627d065462618a834770))
+
 ### [0.0.2](https://github.com/denganjia/suite-kit/compare/v0.0.1...v0.0.2) (2023-09-06)
 
 ### 0.0.1 (2023-09-06)
