@@ -214,8 +214,9 @@ Element/ProTable/drag
 
 | 属性名       | 描述                                                                         | 类型                                                                                          |
 | ------------ | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| type         | 列类型                                                                       | `"index"` \| `"selection"` \| `"expand"` \| `"drag"`                                          |
+| type         | 列类型：序号列、选择列、展开列、拖拽列。                                            | `"index"` \| `"selection"` \| `"expand"` \| `"drag"`                                          |
 | tag          | 数据是否通过`el-tag`渲染，需要配合`enum`使用                                 | `boolean`                                                                                     |
+|tip | 表头的tooltip信息，如果没有单独设置`search.tip`，那么此信息也会显示在搜索表单项的tooltip上。**对应的表头插槽或渲染函数会覆盖tooltip，请自行渲染** | `string \| () => VNodeChild`|
 | isShow       | 是否在表格显示当前列                                                         | `boolean \| Ref<boolean>`                                                                     |
 | search       | 搜索配置                                                                     | [`SearchProps`](#searchprops)                                                                 |
 | enum         | 枚举字典                                                                     | [`EnumProps`](#typescript)[] \| `((params?: any) => Promise<{data:any}>) \| Ref<EnumProps[]>` |
@@ -238,6 +239,7 @@ Element/ProTable/drag
 | span         | 搜索项所占用的列数(grid 布局)，默认 **1** 列  | `number \| { xs: number, sm: number, md: number, lg: number, xl: number }`                              |
 | offset       | 搜索项左侧偏移列数                        | `number \| { xs: number, sm: number, md: number, lg: number, xl: number }`                              |
 | defaultValue | 搜索项默认值                              | `any`                                 |
+| tip          | 表单项的提示信息，如果未设置会使用column上的tip(如果有) | `string\|()=>VNodeChild` |
 | render       | 自定义搜索内容渲染（tsx/h）               | `(scope: SearchRenderScope) => VNode` |
 
 ## Typescript
@@ -249,15 +251,17 @@ Element/ProTable/drag
 export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
 
 export type SearchProps = {
- el?: SearchType; // 渲染的输入组件
- props?: any; // 输入组件的属性，根据 element plus 官方文档来传递，该属性所有值会透传到搜索组件
+ el?: SearchType; // 当前项搜索框的类型
+ props?: any; // 搜索项参数，根据 element plus 官方文档来传递，该属性所有值会透传到组件
  key?: string; // 当搜索项 key 不为 prop 属性时，可通过 key 指定
  order?: number; // 搜索项排序（从大到小）
  span?: number | Record<BreakPoint, number>; // 搜索项所占用的列数，默认为1列
  offset?: number | Record<BreakPoint, number>; // 搜索字段左侧偏移列数
  defaultValue?: any; // 搜索项默认值
- render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx/h）
-}
+ tip?: (() => VNodeChild) | string; // 搜索项提示文字
+ render?: (scope: SearchRenderScope) => VNodeChild; // 自定义搜索内容渲染（tsx语法）
+};
+
 export type SearchType =
  | "text" // 文本框
  | "number" // 数字输入框
@@ -296,6 +300,7 @@ export interface ColumnProps<T = any>
  enum?: EnumProps[] | ((params?: any) => Promise<any>) | Ref<EnumProps[]>; // 枚举类型（字典）
  isFilterEnum?: boolean; // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
  fieldNames?: FieldNamesProps; // 指定 label && value && children 的 key 值
+ tip?: (() => VNodeChild) | string; // 表头提示文字
  headerRender?: (scope: HeaderRenderScope<T>) => VNode; // 自定义表头内容渲染（tsx/h）
  render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx/h）
  _children?: ColumnProps<T>[]; // 多级表头 为了和ElTable的children属性做区分，否则会有问题
