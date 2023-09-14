@@ -5,6 +5,8 @@
 
 将搜索表单、表格主体、分页组件封装在一起的超级表格，最少只需要传递一个函数和一个列配置即可生成带搜索表单、表格主体、分页的组件
 
+[CHANGELOG](https://github.com/denganjia/suite-kit/blob/main/packages/el-protable/CHANGELOG.md)
+
 ## 安装
 
 :::warning 警告
