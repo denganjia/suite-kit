@@ -1,5 +1,11 @@
 # @suite-kit/el-protable
 
+## 0.0.3
+
+### Patch Changes
+
+- fix🐛: 修改细节 BUG
+
 ## 0.0.2
 
 ### Patch Changes

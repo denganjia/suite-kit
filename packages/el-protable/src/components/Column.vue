@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { inject, ref, useSlots, defineComponent, PropType, isVNode } from "vue";
+import { inject, ref, useSlots, defineComponent, PropType } from "vue";
 import { ColumnProps, RenderScope, HeaderRenderScope } from "../types";
 import { filterEnum, formatValue, handleProp, handleRowAccordingToProp } from "@suite-kit/utils";
 import { ElButton, ElTableColumn, ElTooltip, ElSpace } from "element-plus";

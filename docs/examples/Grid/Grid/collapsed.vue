@@ -7,7 +7,7 @@
 				<div class="box" :class="item % 2 == 0 ? 'light-3' : 'dark'">{{ item }}</div>
 			</GridItem>
 		</template>
-		<GridItem :span="4" :suffix="true" #="{ overflow }">
+		<GridItem :span="4" suffix #="{ overflow }">
 			<div class="box">
 				{{ overflow ? "溢出" : "未溢出" }}
 			</div>

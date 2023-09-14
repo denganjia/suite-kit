@@ -240,7 +240,6 @@ const { selectionChange, selectedList, selectedListIds, isSelected } = useSelect
 // 处理没有传递request-api而是传递data
 const cacheData = computed(() => {
 	if (props.data) {
-		pageable.value.total = props.data.length;
 		return props.data.slice(
 			(pageable.value.pageNum - 1) * pageable.value.pageSize,
 			pageable.value.pageSize * pageable.value.pageNum,
@@ -249,6 +248,7 @@ const cacheData = computed(() => {
 		return tableData.value;
 	}
 });
+
 // 表格操作 Hooks
 const {
 	tableData,
@@ -267,6 +267,9 @@ const clearSelection = () => tableRef.value!.clearSelection();
 
 // 初始化请求
 onMounted(() => {
+	if (props.data) {
+		pageable.value.total = props.data.length;
+	}
 	props.requestAuto && tableEmits.request();
 	colSettingRef.value?.setCheckedNodes(colSetting);
 	colSettingRef.value?.filter();

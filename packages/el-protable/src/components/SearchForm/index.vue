@@ -8,7 +8,7 @@
 							<template #label>
 								<el-space :size="0">
 									<span>{{ item.label }} </span>
-									<el-tooltip v-if="item.search?.tip ?? item.tip" :content="item.search?.tip ?? item.tip">
+									<el-tooltip v-if="item.search?.tip ?? item.tip">
 										<template #content>
 											<component :is="item.search?.tip ?? item.tip ?? ''"></component>
 										</template>
@@ -44,7 +44,7 @@ import { BreakPoint } from "@suite-kit/grid";
 import { Delete, Search, ArrowDown, ArrowUp, QuestionFilled } from "@element-plus/icons-vue";
 import SearchFormItem from "./SearchFormItem.vue";
 import { Grid, GridItem } from "@suite-kit/grid";
-import { ElButton, ElIcon, ElForm, ElFormItem, ElCard } from "element-plus";
+import { ElButton, ElIcon, ElForm, ElFormItem, ElCard, ElTooltip, ElSpace} from "element-plus";
 
 defineOptions({ name: "SearchForm" });
 
