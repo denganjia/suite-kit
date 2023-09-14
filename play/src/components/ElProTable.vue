@@ -1,6 +1,6 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback">
-		<template #title>
+	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback" title="用户信息表">
+		<template #header-left>
 			<el-button type="warning" @click="changeEnum">警告</el-button>
 		</template>
 	</ProTable>
@@ -29,14 +29,6 @@ const changeEnum = () => {
 		],
 	);
 	columns[1].label = "四川";
-	// columns.push({
-	// 	label: "测试",
-	// 	prop: "test",
-	// 	isShow: true,
-	// 	search: {
-	// 		el: "number",
-	// 	},
-	// });
 };
 const enumGender = ref([
 	{ label: "男", value: 1 },
@@ -55,12 +47,13 @@ const getEnum = async () => {
 };
 
 const columns = reactive<ColumnProps[]>([
-	// {
-	// 	type: "drag",
-	// },
 	{
-		label: "用户超级长用户超级长用户超级长用户超级长",
+		type: "drag",
+	},
+	{
+		label: "用户",
 		prop: "user",
+		tip: "用户超级长用户超级长用户超级长用户超级长",
 		_children: [
 			{
 				label: "姓名",
@@ -68,7 +61,13 @@ const columns = reactive<ColumnProps[]>([
 				search: {
 					el: "text",
 				},
-				isShow: true,
+				tip() {
+					return (
+						<el-button link type={"primary"}>
+							用户姓名2
+						</el-button>
+					);
+				},
 			},
 			{ label: "年龄", prop: "age", search: { el: "number", props: {} } },
 		],

@@ -1,10 +1,10 @@
-import type { Ref, Component } from "vue";
+import type { Ref, Component, VNodeChild } from "vue";
 import type { BreakPoint } from "@suite-kit/grid";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import type { Table } from "@suite-kit/hooks";
-import { VNodeChild } from "@vue/runtime-core";
+// import { VNodeChild } from "@vue/runtime-core";
 
-type ToolButtonConfig = ["refresh", "setting", "search"] | boolean;
+type ToolButtonConfig = Array<"refresh" | "setting" | "search"> | boolean;
 
 export type PaginationConfig = {
 	small?: boolean;
@@ -79,6 +79,7 @@ export type SearchProps = {
 	span?: number | Record<BreakPoint, number>; // 搜索项所占用的列数，默认为1列
 	offset?: number | Record<BreakPoint, number>; // 搜索字段左侧偏移列数
 	defaultValue?: any; // 搜索项默认值
+	tip?: (() => VNodeChild) | string; // 搜索项提示文字
 	render?: (scope: SearchRenderScope) => VNodeChild; // 自定义搜索内容渲染（tsx语法）
 };
 
@@ -113,4 +114,5 @@ export interface ColumnProps<T = any>
 	headerRender?: (scope: HeaderRenderScope<T>) => VNodeChild; // 自定义表头内容渲染（tsx语法）
 	render?: (scope: RenderScope<T>) => VNodeChild; // 自定义单元格内容渲染（tsx语法）
 	_children?: ColumnProps<T>[]; // 多级表头
+	tip?: (() => VNodeChild) | string; // 表头提示
 }

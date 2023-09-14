@@ -1,10 +1,22 @@
 <template>
 	<el-card>
 		<div v-if="columns.length" class="table-search">
-			<el-form ref="formRef" :model="searchParam" :show-message="false" label-width="auto" label-suffix=":">
+			<el-form ref="formRef" :model="searchParam" :show-message="false" label-width="auto">
 				<Grid ref="gridRef" :collapsed="collapsed" :collapsed-rows="collapsedRows" :gap="[10, 10]" :cols="searchCol">
 					<GridItem v-for="(item, index) in columns" :key="item.prop" v-bind="getResponsive(item)" :index="index">
-						<el-form-item :label="item.label">
+						<el-form-item>
+							<template #label>
+								<el-space :size="0">
+									<span>{{ item.label }} </span>
+									<el-tooltip v-if="item.search?.tip ?? item.tip" :content="item.search?.tip ?? item.tip">
+										<template #content>
+											<component :is="item.search?.tip ?? item.tip ?? ''"></component>
+										</template>
+										<el-button style="padding: 0" :icon="QuestionFilled" link></el-button>
+									</el-tooltip>
+									<span>:</span>
+								</el-space>
+							</template>
 							<SearchFormItem :column="item" :search-param="searchParam" />
 						</el-form-item>
 					</GridItem>
@@ -29,7 +41,7 @@
 import { computed, ref, inject } from "vue";
 import { ColumnProps } from "../../types";
 import { BreakPoint } from "@suite-kit/grid";
-import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
+import { Delete, Search, ArrowDown, ArrowUp, QuestionFilled } from "@element-plus/icons-vue";
 import SearchFormItem from "./SearchFormItem.vue";
 import { Grid, GridItem } from "@suite-kit/grid";
 import { ElButton, ElIcon, ElForm, ElFormItem, ElCard } from "element-plus";
