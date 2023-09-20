@@ -1,5 +1,11 @@
 # @suite-kit/el-protable
 
+## 0.0.4
+
+### Patch Changes
+
+- 🚨 修改内部 class 名称
+
 ## 0.0.3
 
 ### Patch Changes
