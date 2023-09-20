@@ -1,0 +1,60 @@
+.el-protable {
+	.el-protable-search {
+		.el-protable-search__content {
+			// 覆盖ElementPlus默认样式
+			.el-form {
+				.el-form-item__content > * {
+					width: 100%;
+				}
+				.el-form-item {
+					margin: 0;
+				}
+				.el-range-editor.el-input__wrapper {
+					padding: 0 10px;
+				}
+			}
+			.el-protable-search__content-action {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+			}
+		}
+	}
+	.el-protable-main {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+		.el-protable-main-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding-bottom: 15px;
+			.el-protable-main-header__left {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				flex: 1;
+				.el-protable-main-header__left-title {
+					font-weight: 500;
+					font-size: 16px;
+				}
+			}
+		}
+
+		.el-table {
+			flex: 1;
+			// 修复 safari 浏览器表格错位 https://github.com/HalseySpicy/Geeker-Admin/issues/83
+			table {
+				width: 100%;
+			}
+		}
+		// 表格 pagination 样式
+		.el-pagination {
+			display: flex;
+			justify-content: flex-end;
+			margin-top: 20px;
+		}
+	}
+}

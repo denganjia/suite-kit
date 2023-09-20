@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div :style="isShowSearch ? { marginBottom: '18px' } : ''">
+	<div class="el-protable">
+		<div class="el-protable-search" :style="isShowSearch ? { marginBottom: '18px' } : ''">
 			<SearchForm
 				v-show="isShowSearch"
 				:search="tableEmits.search"
@@ -10,140 +10,132 @@
 				:search-col="searchCol"
 			/>
 		</div>
-		<div class="table-main">
+		<div class="el-protable-main">
+			<!-- 表格内容 card -->
 			<el-card>
-				<!-- 表格内容 card -->
-				<div>
-					<!-- 表格头部 操作按钮 -->
-					<div class="table-header">
-						<div class="header-button-lf">
-							<span class="title">
-								<slot name="title">
-									{{ props.title }}
-								</slot>
-							</span>
-							<span>
-								<slot
-									name="header-left"
-									:selected-list-ids="selectedListIds"
-									:selected-list="selectedList"
-									:is-selected="isSelected"
-								/>
-							</span>
-						</div>
-						<div v-if="!!toolButton" class="header-button-ri">
-							<el-divider v-if="$slots['header-left']" direction="vertical"></el-divider>
-							<slot name="toolButton">
-								<el-button v-if="showToolButtonItem('refresh')" :icon="Refresh" circle @click="tableEmits.refresh" />
-								<el-popover v-if="showToolButtonItem('setting') && columns.length" trigger="click" width="fit-content">
-									<template #reference>
-										<el-button :icon="Operation" circle />
+				<!-- 表格头部 操作按钮 -->
+				<div class="el-protable-main-header">
+					<div class="el-protable-main-header__left">
+						<span class="el-protable-main-header__left-title">
+							<slot name="title">
+								{{ props.title }}
+							</slot>
+						</span>
+						<span class="el-protable-main-header__action">
+							<slot
+								name="header-left"
+								:selected-list-ids="selectedListIds"
+								:selected-list="selectedList"
+								:is-selected="isSelected"
+							/>
+						</span>
+					</div>
+					<div v-if="!!toolButton" class="el-protable-main__action">
+						<el-divider v-if="$slots['header-left']" direction="vertical"></el-divider>
+						<slot name="toolButton">
+							<el-button v-if="showToolButtonItem('refresh')" :icon="Refresh" circle @click="tableEmits.refresh" />
+							<el-popover v-if="showToolButtonItem('setting') && columns.length" trigger="click" width="fit-content">
+								<template #reference>
+									<el-button :icon="Operation" circle />
+								</template>
+								<el-tree
+									ref="colSettingRef"
+									:data="tableColumns"
+									node-key="prop"
+									show-checkbox
+									draggable
+									:allow-drop="allowDrop"
+									:props="{ children: '_children' }"
+									@node-drop="dropSuccess"
+									:filter-node-method="filterTreeNode"
+									@check-change="treeCheckChange"
+								>
+									<template #default="{ data }">
+										<div
+											style="display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 1em"
+										>
+											<span>{{ data.label }}</span>
+											<el-icon>
+												<Rank></Rank>
+											</el-icon>
+										</div>
 									</template>
-									<el-tree
-										ref="colSettingRef"
-										:data="tableColumns"
-										node-key="prop"
-										show-checkbox
-										draggable
-										:allow-drop="allowDrop"
-										:props="{ children: '_children' }"
-										@node-drop="dropSuccess"
-										:filter-node-method="filterTreeNode"
-										@check-change="treeCheckChange"
-									>
-										<template #default="{ data }">
-											<div
-												style="
-													display: flex;
-													justify-content: space-between;
-													align-items: center;
-													width: 100%;
-													gap: 1em;
-												"
-											>
-												<span>{{ data.label }}</span>
-												<el-icon>
-													<Rank></Rank>
-												</el-icon>
-											</div>
-										</template>
-									</el-tree>
-								</el-popover>
-								<el-button
-									v-if="showToolButtonItem('search') && searchColumns.length"
-									:icon="Search"
-									circle
-									@click="isShowSearch = !isShowSearch"
-								/>
+								</el-tree>
+							</el-popover>
+							<el-button
+								v-if="showToolButtonItem('search') && searchColumns.length"
+								:icon="Search"
+								circle
+								@click="isShowSearch = !isShowSearch"
+							/>
+						</slot>
+					</div>
+				</div>
+				<!-- 表格主体 -->
+				<el-table
+					ref="tableRef"
+					v-bind="$attrs"
+					:data="cacheData"
+					:border="border"
+					:row-key="rowKey"
+					@selection-change="selectionChange"
+				>
+					<!-- 默认插槽 -->
+					<slot></slot>
+					<template v-for="item in tableColumns" :key="item">
+						<!-- selection || index || expand -->
+						<el-table-column
+							v-if="item.type && ['selection', 'index', 'expand', 'drag'].includes(item.type)"
+							v-bind="item"
+							:align="item.align ?? 'center'"
+							:reserve-selection="item.type == 'selection'"
+							:width="item.type === 'drag' ? '48px' : item.width"
+						>
+							<template v-if="item.type == 'expand'" #default="scope">
+								<component :is="item.render" v-bind="scope" v-if="item.render"></component>
+								<slot v-else :name="item.type" v-bind="scope"></slot>
+							</template>
+							<template v-if="item.type === 'drag'">
+								<div class="el-protable-drag-handle">
+									<el-icon>
+										<DCaret></DCaret>
+									</el-icon>
+								</div>
+							</template>
+						</el-table-column>
+						<!-- other -->
+						<ElProTableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
+							<template v-for="slot in Object.keys($slots)" #[slot]="scope">
+								<slot :name="slot" v-bind="scope"></slot>
+							</template>
+						</ElProTableColumn>
+					</template>
+					<!-- 插入表格最后一行之后的插槽 -->
+					<template #append>
+						<slot name="append"></slot>
+					</template>
+					<!-- 无数据 -->
+					<template #empty>
+						<div>
+							<slot name="empty">
+								<div>暂无数据</div>
 							</slot>
 						</div>
-					</div>
-					<!-- 表格主体 -->
-					<el-table
-						ref="tableRef"
-						v-bind="$attrs"
-						:data="cacheData"
-						:border="border"
-						:row-key="rowKey"
-						@selection-change="selectionChange"
-					>
-						<!-- 默认插槽 -->
-						<slot></slot>
-						<template v-for="item in tableColumns" :key="item">
-							<!-- selection || index || expand -->
-							<el-table-column
-								v-if="item.type && ['selection', 'index', 'expand', 'drag'].includes(item.type)"
-								v-bind="item"
-								:align="item.align ?? 'center'"
-								:reserve-selection="item.type == 'selection'"
-								:width="item.type === 'drag' ? '48px' : item.width"
-							>
-								<template v-if="item.type == 'expand'" #default="scope">
-									<component :is="item.render" v-bind="scope" v-if="item.render"></component>
-									<slot v-else :name="item.type" v-bind="scope"></slot>
-								</template>
-								<template v-if="item.type === 'drag'">
-									<div class="el-protable-drag-handle">
-										<el-icon>
-											<DCaret></DCaret>
-										</el-icon>
-									</div>
-								</template>
-							</el-table-column>
-							<!-- other -->
-							<ElProTableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
-								<template v-for="slot in Object.keys($slots)" #[slot]="scope">
-									<slot :name="slot" v-bind="scope"></slot>
-								</template>
-							</ElProTableColumn>
-						</template>
-						<!-- 插入表格最后一行之后的插槽 -->
-						<template #append>
-							<slot name="append"></slot>
-						</template>
-						<!-- 无数据 -->
-						<template #empty>
-							<div>
-								<slot name="empty">
-									<div>暂无数据</div>
-								</slot>
-							</div>
-						</template>
-					</el-table>
+					</template>
+				</el-table>
+				<!-- 分页组件 -->
+				<slot name="pagination">
 					<!-- 分页组件 -->
-					<slot name="pagination">
-						<!-- 分页组件 -->
-						<el-pagination
-							v-if="!!pagination"
-							v-bind="paginationProps"
-							:current-page="pageable.pageNum"
-							:page-size="pageable.pageSize"
-							:total="pageable.total"
-							@size-change="handleSizeChange"
-							@current-change="handleCurrentChange"
-						></el-pagination>
-					</slot>
-				</div>
+					<el-pagination
+						v-if="!!pagination"
+						v-bind="paginationProps"
+						:current-page="pageable.pageNum"
+						:page-size="pageable.pageSize"
+						:total="pageable.total"
+						@size-change="handleSizeChange"
+						@current-change="handleCurrentChange"
+					></el-pagination>
+				</slot>
 			</el-card>
 		</div>
 	</div>

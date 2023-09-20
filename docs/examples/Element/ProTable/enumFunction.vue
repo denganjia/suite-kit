@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import ProTable from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import ProTable, { ColumnProps } from "@suite-kit/el-protable";
 import { getDataApi } from "../../../fetch";
 
 //模拟函数请求

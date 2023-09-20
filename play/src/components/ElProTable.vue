@@ -1,5 +1,5 @@
 <template>
-	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback" title="用户信息表" height="500px">
+	<ProTable :request-api="fetchData" :columns="columns" :data-callback="dataCallback" title="用户信息表">
 		<template #header-left>
 			<el-button type="warning" @click="changeEnum">警告</el-button>
 		</template>

@@ -17,8 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import ProTable from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import ProTable, { ColumnProps } from "@suite-kit/el-protable";
 import { getDataApi } from "../../../fetch";
 import { dayjs, ElButton } from "element-plus";
 

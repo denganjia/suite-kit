@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="tsx">
-import ProTable from "@suite-kit/el-protable";
-import { ColumnProps, SearchRenderScope } from "@suite-kit/el-protable";
+import ProTable, { ColumnProps, SearchRenderScope } from "@suite-kit/el-protable";
 import { getDataApi } from "../../../fetch";
 import { dayjs, ElAutocomplete } from "element-plus";
 import { onMounted, ref } from "vue";
@@ -35,7 +34,6 @@ const loadAll = () => {
 		{ value: "babel", link: "https://github.com/babel/babel" },
 	];
 };
-
 
 onMounted(() => {
 	restaurants.value = loadAll();

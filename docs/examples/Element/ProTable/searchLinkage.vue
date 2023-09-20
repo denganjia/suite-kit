@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import ProTable, { ProTableInstance } from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import ProTable, { ProTableInstance, ColumnProps } from "@suite-kit/el-protable";
 import { getDataApi } from "../../../fetch";
 import { ref } from "vue";
 

@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import ProTable from "@suite-kit/el-protable";
-import { ColumnProps } from "@suite-kit/el-protable";
+import ProTable, { ColumnProps } from "@suite-kit/el-protable";
 import { dayjs } from "element-plus";
 
 const data = Array(20)
