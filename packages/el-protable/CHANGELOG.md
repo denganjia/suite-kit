@@ -1,5 +1,11 @@
 # @suite-kit/el-protable
 
+## 0.0.5
+
+### Patch Changes
+
+- fix: 将`header-lf`插槽名修改为`action`，将`toolButton`插槽名修改为`tools`，更加语义化
+
 ## 0.0.4
 
 ### Patch Changes

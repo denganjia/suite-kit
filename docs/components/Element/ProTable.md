@@ -159,8 +159,9 @@ Element/ProTable/drag
 | default             | `ElTable`默认插槽|
 | append              | 插入至表格最后一行之后的内容， 如果需要对表格的内容进行无限滚动操作，可能需要用到这个 slot。 若表格有合计行，该 slot 会位于合计行之上。                                           |
 | empty               | 当数据为空时自定义的内容|
-| tableHeader         | 表格头部左侧区域插槽|
-| toolButton          | 表格头部右侧区域插槽|
+| title         | 表格标题|
+| action | 表格操作区插槽 |
+| tools          | 表格工具栏插槽 |
 | `column.prop`       | 表格列具名插槽。示例：如果有个列的 prop 属性是`type`，那`suite-kit/ElProTable`中也会有一个 `<slot name="type"></slot>`的插槽|
 | `column.prop`Header | 表格列表头部分具名插槽。示例：如果有个列的 prop 属性是`type`，那`suite-kit/ElProTable`中也会有一个 `<slot name="typeHeader"></slot>`的插槽。推荐使用[headerRender](#columnsprops)|     |
 | pagination          | 分页器|

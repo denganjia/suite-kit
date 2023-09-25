@@ -23,7 +23,7 @@
 						</span>
 						<span class="el-protable-main-header__action">
 							<slot
-								name="header-left"
+								name="action"
 								:selected-list-ids="selectedListIds"
 								:selected-list="selectedList"
 								:is-selected="isSelected"
@@ -31,8 +31,8 @@
 						</span>
 					</div>
 					<div v-if="!!toolButton" class="el-protable-main__action">
-						<el-divider v-if="$slots['header-left']" direction="vertical"></el-divider>
-						<slot name="toolButton">
+						<el-divider v-if="$slots['action']" direction="vertical"></el-divider>
+						<slot name="tools">
 							<el-button v-if="showToolButtonItem('refresh')" :icon="Refresh" circle @click="tableEmits.refresh" />
 							<el-popover v-if="showToolButtonItem('setting') && columns.length" trigger="click" width="fit-content">
 								<template #reference>
