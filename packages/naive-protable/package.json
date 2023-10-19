@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "dependencies": {
-    "@suite-kit/hooks": "*"
+    "@suite-kit/hooks": "*",
+    "naive-ui": "^2.35.0"
   },
   "devDependencies": {
     "vue": "^3.3.4"
