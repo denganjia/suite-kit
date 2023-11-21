@@ -100,6 +100,17 @@ const columns = reactive<ColumnProps[]>([
 		search: { el: "cascader" },
 		enum: getEnum,
 	},
+	{
+		label: "操作",
+		prop: "operation",
+		render() {
+			return (
+				<ElButton link type="primary">
+					测试按钮
+				</ElButton>
+			);
+		},
+	},
 ]);
 </script>
 

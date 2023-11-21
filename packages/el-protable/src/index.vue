@@ -182,7 +182,7 @@ const dropSuccess = (draggingNode: any) => {
 };
 // 过滤隐藏的column
 const filterTreeNode = (value: any, data: any) => {
-	return data.isShow && !data.type;
+	return data.isShow && !data.type && data.prop !== "operation";
 };
 
 // tree check事件
